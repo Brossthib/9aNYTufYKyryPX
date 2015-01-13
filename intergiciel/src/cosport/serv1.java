@@ -54,13 +54,20 @@ public class serv1 extends HttpServlet {
 			//reflechir à comment obtenir la personne connectée pour lui associer l'annonce
 			String sport = request.getParameter("sport");
 			String lieu = request.getParameter("lieu");
-			//convertir la String sport en l'objet Sport
-			Sport s = Sport.valueOf(sport);
-			Lieu l = fl.trouverLieu(lieu);
+			//Si le sport entré n'existe pas
+			try {
+				//convertir la String sport en l'objet Sport
+				Sport s = Sport.valueOf(sport);			
+				Lieu l = fl.trouverLieu(lieu);
 			//Lieu l=new Lieu(lieu);
 			fa.ajouterAnnonce(s,l);
 			//response.getWriter().println("<html><body>" + "resultats" + "</body></html>");
-			this.getServletContext().getRequestDispatcher("/resultats.html").forward(request, response);
+			this.getServletContext().getRequestDispatcher("/serv1?op=lister").forward(request, response);
+			
+			}catch (IllegalArgumentException e) {
+				this.getServletContext().getRequestDispatcher("/failedRequest.html").forward(request, response);
+			}
+
 		}
 			
 		if(sop.equals("lister")){

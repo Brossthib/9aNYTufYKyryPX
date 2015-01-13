@@ -1,8 +1,9 @@
-
-<%@ page language="java" contentType="text/html; charset=UTF-8"
-    pageEncoding="UTF-8"%>
-    <%@ page import="java.util.*,cosport.*" %>
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<!DOCTYPE HTML>
+<!--
+	Alpha by HTML5 UP
+	html5up.net | @n33co
+	Free for personal and commercial use under the CCA 3.0 license (html5up.net/license)
+-->
 <html>
 	<head>
 		<title>Co sport</title>
@@ -39,7 +40,8 @@
 		<!-- Banner -->
 			<section id="banner">
 				<h2>Co Sport</h2>
-				<p>Another fine responsive way to be awesome !!</p>
+				<p>Votre requête est invalide !<br/>
+				Remplissez bien tous les champs</p>
 			</section>
 
 		<!-- Main -->
@@ -47,32 +49,21 @@
 		
 				<section class="box special">
 					<header class="major">
-						<h2>Resultats de la recherche :</h2>
-													
-						<%Collection<Annonce> ann = (Collection<Annonce>) request.getAttribute("annonces");%>
-						
-						<% if (ann.isEmpty()){%>
-							<p>Il n'y a pas d'annonces, désolé</p>
-							<%} %>
-						<ul>
-						<%for(Annonce p : ann){%>
-							<li>
-							<a href="#" /><%=p.getSport().toString()%></a><br/>
-							<%=p.getLieu().getNom()%>
-							</li>
+						<h2>Remplir le formulaire pour déposer une annonce
+						</h2>
+						<form method="post" action="serv1">
+							<input type="hidden" name="op" value="Deposer annonce" />
 							
-						<%}%>
-						</ul>
-						<p>
-						<a href="index.html" class="button"/>Retour à l'index</a><br/>
-						<a href="deposer.html" class="button">Créer une nouvelle annonce</a><br/>
-						<!--TODO modifier en fonction de si on a accédé a cette page depuis recherche ou depuis deposer-->
-						</p>
+							Sport : <input type= "text" name="sport" /> <br/>
+							Lieu : <input type ="text" name = "lieu" /> <br/>
+							
+							<input type="submit" value="Deposer annonce" />
+							</form>
+							<p><a href="serv1?op=lister" class="button">Consulter les annonces</a></p>								
 					</header>
-					<span class="image featured"><img src="images/Sport-Quote.jpg" alt="" /></span>
+					<span class="image featured"><img src="images/champion3.jpg" alt="" /></span>
 				</section>						
-
-			</section>
+		</section>
 			
 
 			
