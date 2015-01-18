@@ -10,18 +10,27 @@ public class facadeAnnonce {
 	private EntityManager em;
 
 	//private Collection<Annonce> annonces = new ArrayList<Annonce>();
-	public void ajouterPersonne (Personne p){
+	/*Déplacé vers la facade de connection Session
+	 * public void ajouterPersonne (Personne p){
 		em.persist(p);
-	}
+	}*/
 	
-	public void ajouterAnnonce(Sport s,Lieu l){
+	public void ajouterAnnonce(Sport s,Lieu l, Personne p, int nb){
 
 		em.persist(l);
-		Annonce a = new Annonce(s,l);
-		a.setLieu(l);
+		Annonce a = new Annonce(s,l,p,nb);
 		em.persist(a);
 
 	}
+	
+	public void ajouterAnnonce(Sport s,Lieu l, String n, Personne p, int nb){
+
+		em.persist(l);
+		Annonce a = new Annonce(s,l,n,p,nb);
+		em.persist(a);
+
+	}
+	
 /*	public void supprimerAnnonce(Annonce a){
 		em.remove(a);
 	}
@@ -43,6 +52,21 @@ public class facadeAnnonce {
 		Collection<Annonce> la = em.createQuery("select a from Annonce a", Annonce.class)
 				.getResultList();
 		return la;
+	}
+	
+	/**
+	 * Trouve une annonce a partir de son id sous forme de string
+	 * @param idS la chaine représentant l'id de l'annonce recherchée
+	 * @return l'annonce recherchée si elle existe, null sinon
+	 */
+	public Annonce trouverAnnonce(String idS) {
+		Collection<Annonce> la = this.listerAnnonces();
+		for (Annonce a : la) {
+			if (a.getIdString().equals(idS)) {
+				return a;
+			}
+		}
+		return null;
 	}
 	
 }

@@ -1,8 +1,8 @@
-
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
     <%@ page import="java.util.*,cosport.*" %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+
 <html>
 	<head>
 		<title>Co sport</title>
@@ -30,30 +30,9 @@
 			<header id="header" class="alt">
 				<h1><a href="index.html">Co Sport</a> by us</h1>
 				<nav id="nav">
-				<%String pseudo = (String) request.getAttribute("pseudoUser"); %>
 					<ul>
 						<li><a href="index.html">Home</a></li>
-						<%if (!pseudo.equals("empty")) { %>
-						<li><a href="" class="icon fa-angle-down"><%=pseudo %></a>
-							<ul>
-								<li><a href="Profil.html">Profil</a></li>
-								<li><a href="contact.html">Voir mes annonces</a></li>
-								<!-- Idée : mettre les annonce en menu deroulant -->
-								<li><a href="serv1?op=deconnecter">Me deconnecter</a></li>
-								<li>
-									<a href="">Submenu</a>
-									<ul>
-										<li><a href="#">Option One</a></li>
-										<li><a href="#">Option Two</a></li>
-										<li><a href="#">Option Three</a></li>
-										<li><a href="#">Option Four</a></li>
-									</ul>
-								</li>
-							</ul>
-						</li>
-						<%} else {%>
-						<li><a href="connection.html" class="button">Se connecter</a></li>
-						<%} %>
+						<li><a href="#" class="button">Sign Up</a></li>
 					</ul>
 				</nav>
 			</header>
@@ -69,37 +48,36 @@
 		
 				<section class="box special">
 					<header class="major">
-						<h2>Resultats de la recherche :</h2>
-													
-						<%Collection<Annonce> ann = (Collection<Annonce>) request.getAttribute("annonces");%>
+						<h2>Détails de l'annonce :</h2>
 						
-						<% if (ann.isEmpty()){%>
-							<p>Il n'y a pas d'annonces, désolé</p>
-							<%} %>
-						<ul>
-						<%for(Annonce p : ann){%>
-							<li>
-							<b><%=p.getNom().toString()%></b><br/>
-							<%=p.getSport().toString()%><br/>
-							<%=p.getLieu().getNom()%><br/>
-							<form method="post" action="serv1">
-								<input type="hidden" name="op" value="afficher annonce" />
-								<input type="hidden" name="annonce" value=<%=p.getIdString()%> />
-								<input type="submit" value="Plus de détails" /><br/>
-							</form>
-							</li>
-							
-						<%}%>
-						</ul>
+						<%Annonce ann = (Annonce) request.getAttribute("annonce"); %>
+						<!-- <%Collection<Personne> participants = ann.getParticipants(); %>-->
+						
 						<p>
-						<a href="index.html" class="button"/>Retour à l'index</a><br/>
-						<a href="deposer.html" class="button">Créer une nouvelle annonce</a><br/>
-						<!--TODO modifier en fonction de si on a accédé a cette page depuis recherche ou depuis deposer-->
-						</p>
+						<b><%=ann.getNom() %></b>
+						<ul>
+						<li> Déposée par : <%=ann.getDeposeur().getPseudo() %></li>
+						<li> Date : 27/11/2016</li>
+						<li> Lieu : <%=ann.getLieu().getNom() %></li>
+						<li> Sport : <%=ann.getSport() %></li>
+						<!-- 
+						<li> Participants (<%=participants.size() %>/<%=ann.getNbMaxParticipant() %>)
+							<ul>
+							<%for(Personne p : participants){%>
+								<li>
+								<b><%=p.getPseudo()%></b><br/>
+								</li>
+							<%}%>
+							</ul>
+						</li>
+						-->
+						</ul></p>
 					</header>
-					<span class="image featured"><img src="images/Sport-Quote.jpg" alt="" /></span>
-				</section>						
-
+					<p><a href="pagePayement.html" class="button">Participer privé</a>
+					<a href="serv1?op=participer?annonce=<%=ann.getId() %>" class="button">Participer public</a></p>
+					<span class="image featured"><img src="images/pic01.jpg" alt="" /></span>
+				</section>
+									
 			</section>
 			
 
@@ -115,7 +93,7 @@
 					<li><a href="#" class="icon fa-google-plus"><span class="label">Google+</span></a></li>
 				</ul>
 				<ul class="copyright">
-					<li>&copy; Co sport. All rights reserved.</li><li>Design: <a href="http://html5up.net">HTML5 UP</a></li>
+					<li>&copy; Cosport. All rights reserved.</li><li>Design: <a href="http://html5up.net">HTML5 UP</a></li>
 				</ul>
 			</footer>
 

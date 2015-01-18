@@ -28,6 +28,9 @@ public class serv1 extends HttpServlet {
        private facadeAnnonce fa;
        
        @EJB
+       private Session session;
+       
+       @EJB
        private facadeLieu fl;
        
     /**
@@ -48,23 +51,49 @@ public class serv1 extends HttpServlet {
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		
+		if (session.isConnecte()) {
+			Personne p = session.getUtilisateur();
+			request.setAttribute("pseudoUser", p.getPseudo());
+		}
+		else {
+			request.setAttribute("pseudoUser", "empty");
+		}
+		
 		String sop = request.getParameter("op");
 		
 		if(sop.equals("Deposer annonce")){
 			//reflechir à comment obtenir la personne connectée pour lui associer l'annonce
 			String sport = request.getParameter("sport");
 			String lieu = request.getParameter("lieu");
-			//Si le sport entré n'existe pas
-			try {
-				//convertir la String sport en l'objet Sport
-				Sport s = Sport.valueOf(sport);			
-				Lieu l = fl.trouverLieu(lieu);
-			//Lieu l=new Lieu(lieu);
-			fa.ajouterAnnonce(s,l);
-			//response.getWriter().println("<html><body>" + "resultats" + "</body></html>");
-			this.getServletContext().getRequestDispatcher("/serv1?op=lister").forward(request, response);
+			String nbp = request.getParameter("nb");
+			System.out.println(nbp);
 			
-			}catch (IllegalArgumentException e) {
+			//Si le sport entré existe
+			try {
+
+				//convertir la String sport en l'objet Sport
+				Sport s = Sport.valueOf(sport);
+				
+				if(lieu.equals("")) {
+					this.getServletContext().getRequestDispatcher("/failedRequest.html").forward(request, response);
+				}
+				else {
+						//On doit être connecté pour pouvoir déposer une annonce
+					if (session.isConnecte()) {
+		
+						Lieu l = fl.trouverLieu(lieu);
+						//int nb = Integer.parseInt(nbp);
+						Personne p = session.getUtilisateur();
+						fa.ajouterAnnonce(s,l,p,5);
+						this.getServletContext().getRequestDispatcher("/serv1?op=lister").forward(request, response);
+					}
+					else {
+						this.getServletContext().getRequestDispatcher("/connection.html").forward(request, response);
+					}
+				}
+			//Si le sport entré n'existe pas
+			}catch (Exception e) {
 				this.getServletContext().getRequestDispatcher("/failedRequest.html").forward(request, response);
 			}
 
@@ -75,7 +104,67 @@ public class serv1 extends HttpServlet {
 			request.setAttribute("annonces", annonces);
 			this.getServletContext().getRequestDispatcher("/lister.jsp").forward(request, response);
 		}
+		
+		if(sop.equals("afficher annonce")){
+			String ann = request.getParameter("annonce");
+			if (fa.trouverAnnonce(ann)==null)
+				this.getServletContext().getRequestDispatcher("/index.html").forward(request, response);
+			else{
+			request.setAttribute("annonce", fa.trouverAnnonce(ann));
+			this.getServletContext().getRequestDispatcher("/resultat.jsp").forward(request, response);
+			}
+		}
+		
+		if (sop.equals("admin")) {
+			Personne p = new Personne("admin", "coucou", "salut", Genre.Masculin, "a");
+			session.inscription(p);
+			session.connection("admin", "a");
+			this.getServletContext().getRequestDispatcher("/index.html").forward(request, response);
+		}
+		
+		if (sop.equals("connection")) {
+			String pseudo = request.getParameter("pseudo");
+			String mdp = request.getParameter("motP");
+			if (session.connection(pseudo, mdp)) {
+				this.getServletContext().getRequestDispatcher("/index.html").forward(request, response);
+			}
+			else {
+				this.getServletContext().getRequestDispatcher("/connection.html").forward(request, response);
+			}
+		}
+		
+		if (sop.equals("inscription")) {
+			String pseudo = request.getParameter("pseudo");
+			String nom = request.getParameter("nom");
+			String mdp = request.getParameter("motP");
+			String prenom = request.getParameter("prenom");
+			String g = request.getParameter("genre");
+			Genre genre = Genre.valueOf(g);
+			Personne p = new Personne(pseudo, nom, prenom, genre, mdp);
+			if (session.inscription(p)) {
+				this.getServletContext().getRequestDispatcher("/index.html").forward(request, response);
+			}
+			else {
+				this.getServletContext().getRequestDispatcher("/inscription.html").forward(request, response);
+			}
+		}
+		
+		if (sop.equals("deconnecter")) {
+			session.deconnection();
+			this.getServletContext().getRequestDispatcher("/index.html").forward(request, response);
+		}
+		
+		if (sop.equals("participer")) {
+			String idAnnonce = request.getParameter("annonce");
+			Annonce ann = fa.trouverAnnonce(idAnnonce);
+			if (ann.ajouterParticipant(session.getUtilisateur())) {
+				request.setAttribute("annonce", ann);
+				this.getServletContext().getRequestDispatcher("/resultat.jsp").forward(request, response);
+			}
+			else
+				this.getServletContext().getRequestDispatcher("/index.html").forward(request, response);
+		}
 
 		
-}
 	}
+}
