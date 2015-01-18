@@ -31,6 +31,11 @@ public class facadeAnnonce {
 
 	}
 	
+	public void majAnnonce(Annonce nouvelle, Annonce ancienne) {
+		em.remove(ancienne);
+		em.persist(nouvelle);
+	}
+	
 /*	public void supprimerAnnonce(Annonce a){
 		em.remove(a);
 	}

@@ -2,7 +2,6 @@
     pageEncoding="UTF-8"%>
     <%@ page import="java.util.*,cosport.*" %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-
 <html>
 	<head>
 		<title>Co sport</title>
@@ -30,9 +29,27 @@
 			<header id="header" class="alt">
 				<h1><a href="index.html">Co Sport</a> by us</h1>
 				<nav id="nav">
+				<%Personne user = (Personne) request.getAttribute("User"); %>
 					<ul>
 						<li><a href="index.html">Home</a></li>
-						<li><a href="#" class="button">Sign Up</a></li>
+						<%if (user != null) { %>
+						<%Collection<Annonce> annParticipe = user.getParticipeIci(); %>
+						<li><a href="" class="icon fa-angle-down"><%=user.getPseudo() %></a>
+							<ul>
+								<li><a href="profil.jsp">Profil</a></li>
+								<li>
+									<a href="listerPerso.jsp">Mes annonces</a></li>
+									<ul>
+										<%for (Annonce a : annParticipe) {%></ul>
+										<li><a href=""><%=a.getNom() %></a></li>
+										<%} %>
+									</ul>									
+								<li><a href="serv1?op=deconnecter">Me deconnecter</a></li>
+							</ul>
+						</li>
+						<%} else {%>
+						<li><a href="connection.html" class="button">Se connecter</a></li>
+						<%} %>
 					</ul>
 				</nav>
 			</header>
@@ -48,40 +65,38 @@
 		
 				<section class="box special">
 					<header class="major">
-						<h2>Détails de l'annonce :</h2>
+						<h2>Resultats de la recherche :</h2>
 						
-						<%Annonce ann = (Annonce) request.getAttribute("annonce"); %>
-						<%Collection<Personne> participants = ann.getParticipants(); %>
+						<%Personne pers = (Personne) request.getAttribute("User");%>							
+						<%Collection<Annonce> ann = pers.getAnnonces();%>
 						
-						<p>
-						<b><%=ann.getNom() %></b>
+						<% if (ann.isEmpty()){%>
+							<p>Il n'y a pas d'annonces, désolé</p>
+							<%} %>
 						<ul>
-						<li> Déposée par : <%=ann.getDeposeur().getPseudo() %></li>
-						<li> Date : 27/11/2016</li>
-						<li> Lieu : <%=ann.getLieu().getNom() %></li>
-						<li> Sport : <%=ann.getSport() %></li>
-						<li> Participants (<%=participants.size() %>/<%=ann.getNbMaxParticipant() %>)
-							<ul>
-							<%for(Personne p : participants){%>
-								<li>
-								<b><%=p.getPseudo()%></b><br/>
-								</li>
-							<%}%>
-							</ul>
-						</li>
-						
-						</ul></p>
+						<%for(Annonce p : ann){%>
+							<li>
+							<b><%=p.getNom().toString()%></b><br/>
+							<%=p.getSport().toString()%><br/>
+							<%=p.getLieu().getNom()%><br/>
+							<form method="post" action="serv1">
+								<input type="hidden" name="op" value="afficher annonce" />
+								<input type="hidden" name="annonce" value=<%=p.getIdString()%> />
+								<input type="submit" value="Plus de détails" /><br/>
+							</form>
+							</li>
+							
+						<%}%>
+						</ul>
+						<p>
+						<a href="index.html" class="button"/>Retour à l'index</a><br/>
+						<a href="deposer.html" class="button">Créer une nouvelle annonce</a><br/>
+						<!--TODO modifier en fonction de si on a accédé a cette page depuis recherche ou depuis deposer-->
+						</p>
 					</header>
-					<p><a href="pagePayement.html" class="button">Participer privé</a>
-					<form method="post" action="serv1">
-								<input type="hidden" name="op" value="participer" />
-								<input type="hidden" name="annonce" value=<%=ann.getId() %> />
-								<input type="submit" value="Participer public" /><br/>
-					</form>
-					</p>
-					<span class="image featured"><img src="images/pic01.jpg" alt="" /></span>
-				</section>
-									
+					<span class="image featured"><img src="images/Sport-Quote.jpg" alt="" /></span>
+				</section>						
+
 			</section>
 			
 
@@ -97,7 +112,7 @@
 					<li><a href="#" class="icon fa-google-plus"><span class="label">Google+</span></a></li>
 				</ul>
 				<ul class="copyright">
-					<li>&copy; Cosport. All rights reserved.</li><li>Design: <a href="http://html5up.net">HTML5 UP</a></li>
+					<li>&copy; Co sport. All rights reserved.</li><li>Design: <a href="http://html5up.net">HTML5 UP</a></li>
 				</ul>
 			</footer>
 

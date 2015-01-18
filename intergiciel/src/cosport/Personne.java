@@ -1,9 +1,10 @@
 package cosport;
 import java.util.*;
 
-
-
 import javax.persistence.*;
+
+import org.hibernate.annotations.LazyCollection;
+import org.hibernate.annotations.LazyCollectionOption;
 
 
 
@@ -24,7 +25,8 @@ public class Personne {
 	Collection <Annonce> annonces;
 	
 
-	@OneToMany //(mappedBy = "participants", fetch = FetchType.EAGER)
+	@ManyToMany (mappedBy = "participants")
+	@LazyCollection(LazyCollectionOption.FALSE)
 	Collection <Annonce> participeIci;
 	
 	

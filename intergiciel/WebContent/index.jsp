@@ -1,6 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
-    <%@ page import="java.util.*,cosport.*" %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 
 <html>
@@ -32,7 +31,7 @@
 				<nav id="nav">
 					<ul>
 						<li><a href="index.html">Home</a></li>
-						<li><a href="#" class="button">Sign Up</a></li>
+						<li><a href="#" class="button">Se connecter</a></li>
 					</ul>
 				</nav>
 			</header>
@@ -41,50 +40,34 @@
 			<section id="banner">
 				<h2>Co Sport</h2>
 				<p>Another fine responsive way to be awesome !!</p>
+				<ul class="actions">
+					<li><a href="inscription.html" class="button special">S'inscrire</a></li>
+					<li><a href="connection.html" class="button">Se connecter</a></li><br/>
+					<li><a href="deposer.html" class="button">Deposer une annonce</a></li>
+					<li><a href="serv1?op=lister" class="button">Consulter les annonces</a></li>	
+					<li><a href="serv1?op=admin" class="button">Connection rapide : pseudo : admin, mdp : a</a></li>									
+				</ul>
 			</section>
+
+
 
 		<!-- Main -->
 			<section id="main" class="container">
 		
 				<section class="box special">
 					<header class="major">
-						<h2>Détails de l'annonce :</h2>
-						
-						<%Annonce ann = (Annonce) request.getAttribute("annonce"); %>
-						<%Collection<Personne> participants = ann.getParticipants(); %>
-						
+						<h2>Introducing the ultimate co sport website
+						<br />
+						for practicing with strangers </h2>
 						<p>
-						<b><%=ann.getNom() %></b>
-						<ul>
-						<li> Déposée par : <%=ann.getDeposeur().getPseudo() %></li>
-						<li> Date : 27/11/2016</li>
-						<li> Lieu : <%=ann.getLieu().getNom() %></li>
-						<li> Sport : <%=ann.getSport() %></li>
-						<li> Participants (<%=participants.size() %>/<%=ann.getNbMaxParticipant() %>)
-							<ul>
-							<%for(Personne p : participants){%>
-								<li>
-								<b><%=p.getPseudo()%></b><br/>
-								</li>
-							<%}%>
-							</ul>
-						</li>
-						
-						</ul></p>
+							Pratiquer votre sport favori n'a jamais été aussi simple !<br/>
+							Inscrivez vous, postez votre annonce si elle n'existe pas déjà, et allez vous dégraisser !<br/>
+						</p>
 					</header>
-					<p><a href="pagePayement.html" class="button">Participer privé</a>
-					<form method="post" action="serv1">
-								<input type="hidden" name="op" value="participer" />
-								<input type="hidden" name="annonce" value=<%=ann.getId() %> />
-								<input type="submit" value="Participer public" /><br/>
-					</form>
-					</p>
-					<span class="image featured"><img src="images/pic01.jpg" alt="" /></span>
+					<span class="image featured"><img src="images/sports-motivational.jpg" alt="" /></span>
 				</section>
-									
+						
 			</section>
-			
-
 			
 		<!-- Footer -->
 			<footer id="footer">
@@ -97,7 +80,7 @@
 					<li><a href="#" class="icon fa-google-plus"><span class="label">Google+</span></a></li>
 				</ul>
 				<ul class="copyright">
-					<li>&copy; Cosport. All rights reserved.</li><li>Design: <a href="http://html5up.net">HTML5 UP</a></li>
+					<li>&copy; Co sport. All rights reserved.</li><li>Design: <a href="http://html5up.net">HTML5 UP</a></li>
 				</ul>
 			</footer>
 

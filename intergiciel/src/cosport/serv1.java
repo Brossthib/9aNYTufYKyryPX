@@ -54,10 +54,10 @@ public class serv1 extends HttpServlet {
 		
 		if (session.isConnecte()) {
 			Personne p = session.getUtilisateur();
-			request.setAttribute("pseudoUser", p.getPseudo());
+			request.setAttribute("User", p);
 		}
 		else {
-			request.setAttribute("pseudoUser", "empty");
+			request.setAttribute("User", null);
 		}
 		
 		String sop = request.getParameter("op");
@@ -83,10 +83,11 @@ public class serv1 extends HttpServlet {
 					if (session.isConnecte()) {
 		
 						Lieu l = fl.trouverLieu(lieu);
-						//int nb = Integer.parseInt(nbp);
+						int nb = Integer.parseInt(nbp);
 						Personne p = session.getUtilisateur();
-						fa.ajouterAnnonce(s,l,p,5);
-						this.getServletContext().getRequestDispatcher("/serv1?op=lister").forward(request, response);
+						fa.ajouterAnnonce(s,l,p,nb);
+						//this.getServletContext().getRequestDispatcher("/serv1?op=lister").forward(request, response);
+						this.getServletContext().getRequestDispatcher("/index.html").forward(request, response);
 					}
 					else {
 						this.getServletContext().getRequestDispatcher("/connection.html").forward(request, response);
@@ -116,9 +117,17 @@ public class serv1 extends HttpServlet {
 		}
 		
 		if (sop.equals("admin")) {
-			Personne p = new Personne("admin", "coucou", "salut", Genre.Masculin, "a");
-			session.inscription(p);
+			Personne p1 = new Personne("admin", "coucou", "salut", Genre.Masculin, "a");
+			Personne p2 = new Personne("user", "ave", "cesar", Genre.Masculin, "b");
+			session.inscription(p1);
+			session.inscription(p2);
 			session.connection("admin", "a");
+			this.getServletContext().getRequestDispatcher("/index.html").forward(request, response);
+		}
+		
+		if (sop.equals("annonce1")) {
+			fa.ajouterAnnonce(Sport.Tennis, new Lieu("Paris"), session.getUtilisateur(),2);
+			fa.ajouterAnnonce(Sport.Foot, new Lieu("Toulouse"), session.getUtilisateur(),24);
 			this.getServletContext().getRequestDispatcher("/index.html").forward(request, response);
 		}
 		
@@ -158,11 +167,16 @@ public class serv1 extends HttpServlet {
 			String idAnnonce = request.getParameter("annonce");
 			Annonce ann = fa.trouverAnnonce(idAnnonce);
 			if (ann.ajouterParticipant(session.getUtilisateur())) {
+				fa.majAnnonce(ann, fa.trouverAnnonce(idAnnonce));
 				request.setAttribute("annonce", ann);
 				this.getServletContext().getRequestDispatcher("/resultat.jsp").forward(request, response);
 			}
 			else
 				this.getServletContext().getRequestDispatcher("/index.html").forward(request, response);
+		}
+		
+		if (sop.equals("mesAnnonces")) {
+			this.getServletContext().getRequestDispatcher("/listerPerso.jsp").forward(request, response);
 		}
 
 		

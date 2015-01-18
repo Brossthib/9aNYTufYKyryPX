@@ -25,7 +25,7 @@ public class Session {
 	public boolean inscription (Personne pe){
 		Collection<Personne> pers = getUtilisateurs();
 		for (Personne p : pers) {
-			if (p.getPseudo().equals(pe.getPseudo()) || p.getPseudo().equals("empty")) {
+			if (p.getPseudo().equals(pe.getPseudo())) {
 				return false;
 			}
 		}
@@ -40,6 +40,9 @@ public class Session {
 	 * @return true si la connection s'est bien effectuée, false sinon
 	 */
 	public boolean connection (String pseudo, String motP){
+		if  (this.isConnecte()) {
+			return false;
+		}
 		Collection<Personne> pers = getUtilisateurs();
 		for (Personne p : pers) {
 			if (p.getPseudo().equals(pseudo) && p.getMdp().equals(motP)) {

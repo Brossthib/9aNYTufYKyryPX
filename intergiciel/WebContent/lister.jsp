@@ -30,25 +30,22 @@
 			<header id="header" class="alt">
 				<h1><a href="index.html">Co Sport</a> by us</h1>
 				<nav id="nav">
-				<%String pseudo = (String) request.getAttribute("pseudoUser"); %>
+				<%Personne user = (Personne) request.getAttribute("User"); %>
 					<ul>
 						<li><a href="index.html">Home</a></li>
-						<%if (!pseudo.equals("empty")) { %>
-						<li><a href="" class="icon fa-angle-down"><%=pseudo %></a>
+						<%if (user != null) { %>
+						<%Collection<Annonce> annParticipe = user.getAnnonces(); %>
+						<li><a href="" class="icon fa-angle-down"><%=user.getPseudo() %></a>
 							<ul>
-								<li><a href="Profil.html">Profil</a></li>
-								<li><a href="contact.html">Voir mes annonces</a></li>
-								<!-- Idée : mettre les annonce en menu deroulant -->
-								<li><a href="serv1?op=deconnecter">Me deconnecter</a></li>
+								<li><a href="profil.jsp">Profil</a></li>
 								<li>
-									<a href="">Submenu</a>
+									<a href="serv1?op=mesAnnonces">Mes annonces</a></li>
 									<ul>
-										<li><a href="#">Option One</a></li>
-										<li><a href="#">Option Two</a></li>
-										<li><a href="#">Option Three</a></li>
-										<li><a href="#">Option Four</a></li>
-									</ul>
-								</li>
+										<%for (Annonce a : annParticipe) {%>
+										<li><a href=""><%=a.getNom() %></a></li>
+										<%} %>
+									</ul>									
+								<li><a href="serv1?op=deconnecter">Me deconnecter</a></li>
 							</ul>
 						</li>
 						<%} else {%>

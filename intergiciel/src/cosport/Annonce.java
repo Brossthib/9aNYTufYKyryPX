@@ -2,6 +2,8 @@ package cosport;
 import java.util.ArrayList;
 import java.util.Collection;
 
+import org.hibernate.annotations.LazyCollection;
+import org.hibernate.annotations.LazyCollectionOption;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
@@ -9,7 +11,6 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
 
 
 @Entity
@@ -29,7 +30,8 @@ public class Annonce {
 	@ManyToOne 
 	Personne deposeur;
 	
-	@ManyToMany //(mappedBy = "participeIci", fetch = FetchType.EAGER)
+	@ManyToMany //(fetch = FetchType.LAZY)
+	@LazyCollection(LazyCollectionOption.FALSE)
 	Collection<Personne> participants;
 
 
@@ -110,6 +112,7 @@ public class Annonce {
 		this.deposeur = deposeur;
 	}
 	
+
 	/**
 	 * Rajoute un participant si possible
 	 * @param p le participant
