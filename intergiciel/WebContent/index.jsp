@@ -60,12 +60,17 @@
 				<h2>Co Sport</h2>
 				<p>Another fine responsive way to be awesome !!</p>
 				<ul class="actions">
-					<li><a href="inscription.html" class="button special">S'inscrire</a></li>
-					<%if (user == null) { %><li><a href="serv1?op=connectionjsp" class="button">Se connecter</a></li><%} %><br/>
-					<li><a href="serv1?op=deposer" class="button">Deposer une annonce</a></li>
+					<%if (user == null) { %>
+					<li><a href="serv1?op=inscrire" class="button special">S'inscrire</a></li>
+					<li><a href="serv1?op=connectionjsp" class="button">Se connecter</a></li><%} %><br/>
 					<li><a href="serv1?op=lister" class="button">Consulter les annonces</a></li><br/>	
-					<li><a href="serv1?op=admin" class="button">Connection rapide (admin->a et user->b)</a></li>	<br/>
-					<li><a href="serv1?op=annonce1" class="button">Deposer Annonce préfabriquée</a></li>									
+					<%if (user != null) { %>
+					<li><a href="serv1?op=deposer" class="button">Deposer une annonce</a></li>
+					<li><a href="serv1?op=profil" class="button">Consulter mon profil</a></li>
+					<li><a href="serv1?op=mesAnnonces" class="button">Consulter mes annonces</a></li><br/>
+					<%} %>
+					<!-- <li><a href="serv1?op=admin" class="button">Connection rapide (admin->a et user->b)</a></li>	<br/>
+					<li><a href="serv1?op=annonce1" class="button">Deposer Annonce préfabriquée</a></li>	-->								
 				</ul>
 			</section>
 
@@ -82,7 +87,14 @@
 						<p>
 							Pratiquer votre sport favori n'a jamais été aussi simple !<br/>
 							Inscrivez vous, postez votre annonce si elle n'existe pas déjà, et allez vous dégraisser !<br/>
-						</p>
+						</p><br/>
+						<p>Chercher une annonce<br/><form method="post" action="serv1">
+								<input type="hidden" name="op" value="rechercher" />
+								Lieu : <input style="color : black;" type="text" name="motLieu"/><br/>
+								Sport : <input type="text" style="color : black;" name="motSport"/><br/>
+								<input type="submit" value="Rechercher" /><br/>
+						</form>
+				</p>
 					</header>
 					<span class="image featured"><img src="images/sports-motivational.jpg" alt="" /></span>
 				</section>

@@ -27,8 +27,8 @@ public class facadeLieu {
 	}
 	
 	public Lieu trouverLieu(String n){
-			ArrayList<Lieu> l = (ArrayList<Lieu>) em.createQuery("select l from Lieu l where nom='n' ", Lieu.class).getResultList();
-			if(!(l.isEmpty())){return l.get(0);}
+			ArrayList<Lieu> l = (ArrayList<Lieu>) em.createNativeQuery("select * from Lieu where nom='n' ", Lieu.class).getResultList();
+			if(!(l.isEmpty())){System.out.println("sfhu" + l.get(0).getNom());return l.get(0);}
 			else {return (new Lieu(n));}
 	}
 	

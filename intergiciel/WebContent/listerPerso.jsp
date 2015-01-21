@@ -27,11 +27,11 @@
 
 		<!-- Header -->
 			<header id="header" class="alt">
-				<h1><a href="index.html">Co Sport</a> by us</h1>
+				<h1><a href="serv1?op=index">Co Sport</a> by us</h1>
 				<nav id="nav">
 				<%Personne user = (Personne) request.getAttribute("User"); %>
 					<ul>
-						<li><a href="index.html">Home</a></li>
+						<li><a href="serv1?op=index">Home</a></li>
 						<%if (user != null) { %>
 						<%Collection<Annonce> annParticipe = user.getParticipeIci(); %>
 						<li><a href="" class="icon fa-angle-down"><%=user.getPseudo() %></a>
@@ -88,8 +88,8 @@
 						<%}%>
 						</ul>
 						<p>
-						<a href="index.html" class="button"/>Retour à l'index</a><br/>
-						<a href="deposer.html" class="button">Créer une nouvelle annonce</a><br/>
+						<a href="serv1?op=index" class="button"/>Retour à l'index</a><br/>
+						<a href="serv1?op=deposer" class="button">Créer une nouvelle annonce</a><br/>
 						<!--TODO modifier en fonction de si on a accédé a cette page depuis recherche ou depuis deposer-->
 						</p>
 					</header>

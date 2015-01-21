@@ -1,6 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
-    <%@ page import="java.util.*,cosport.*" %>
+<%@ page import="java.util.*,cosport.*" %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 	<head>
@@ -41,7 +41,7 @@
 									<a href="serv1?op=mesAnnonces">Mes annonces</a>
 									<ul>
 										<%for (Annonce a : annParticipe) {%>
-										<li><a href="serv1?op=afficherAnnonce&annonce=<%=a.getIdString()%>"><%=a.getNom() %></a></li>
+										<li><a href="#"><%=a.getNom() %></a></li>
 										<%} %>
 									</ul>									
 								<li><a href="serv1?op=deconnecter">Me deconnecter</a></li>
@@ -60,47 +60,36 @@
 				<p>Another fine responsive way to be awesome !!</p>
 			</section>
 
+
+
 		<!-- Main -->
 			<section id="main" class="container">
-		
 				<section class="box special">
 					<header class="major">
-						<h2>Resultats de la recherche :</h2>
-													
-						<%Collection<Annonce> ann = (Collection<Annonce>) request.getAttribute("annonces");%>
-						
-						<% if (ann.isEmpty()){%>
-							<p>Il n'y a pas d'annonces, désolé</p>
-							<%} %>
-						<ul>
-						<%for(Annonce p : ann){%>
-							<li>
-							<b><a href="serv1?op=afficherAnnonce&annonce=<%=p.getIdString()%>"><%=p.getNom().toString()%></a></b><br/>
-							<%=p.getSport().toString()%><br/>
-							<%=p.getLieu().getNom().toString()%><br/><br/>
-							<!--  
-							<form method="post" action="serv1">
-								<input type="hidden" name="op" value="afficher annonce" />
-								<input type="hidden" name="annonce" value=<%=p.getIdString()%> />
-								<input type="submit" value="Plus de détails" /><br/>
-							</form>
-							-->
-							</li>
-							
-						<%}%>
-						</ul>
-						<p>
-						<a href="serv1?op=index" class="button"/>Retour à l'index</a><br/>
-						<a href="serv1?op=deposer" class="button">Créer une nouvelle annonce</a><br/>
-						<!--TODO modifier en fonction de si on a accédé a cette page depuis recherche ou depuis deposer-->
-						</p>
+						<h2>Modifiez votre profil :</h2>
+						<form method="post" action="serv1">
+							<input type="hidden" name="op" value="modifierProfil" />	
+								Nom d'utilisateur : <input type= "text" name="pseudo" value="<%=user.getPseudo() %>"/> <br/>		
+								Nom : <input type= "text" name="nom" value="<%=user.getNom() %>"/> <br/>
+								Prenom : <input type= "text" name="prenom" value="<%=user.getPrenom() %>"/> <br/>
+								Genre : <br/>
+								<input class="css-checkbox" type="radio" name="genre" value="Masculin"<%if (user.getGenre()==Genre.Masculin) {%>checked="checked"<%} %>>Homme<br>
+								<input class="css-checkbox" type="radio" name="genre" value="Feminin"<%if (user.getGenre()==Genre.Feminin) {%>checked="checked"<%} %>>Femme	<br/>
+								Ancien Mot de passe : <input type="password" name="AmotP" /><br/>
+								Nouveau mot de passe : <input type="password" name="motP1" /><br/>
+								Confirmer le nouveau mot de passe : <input type="password" name="motP2" /><br/>		
+								<%if ((Integer)request.getAttribute("status") == 0) {%>	
+								<span style="color : red">Mauvais mot de passe</span><br/>	
+								<%} if ((Integer)request.getAttribute("status") == 2) {%>
+								<span style="color : red">Les deux mots de passe ne correspondent pas</span><br/>	
+								<%} %>
+							<input type="submit" value="modifier votre profil" />
+						</form>
 					</header>
-					<span class="image featured"><img src="images/Sport-Quote.jpg" alt="" /></span>
-				</section>						
-
+					<span class="image featured"><img src="images/sports-motivational.jpg" alt="" /></span>
+				</section>
+						
 			</section>
-			
-
 			
 		<!-- Footer -->
 			<footer id="footer">

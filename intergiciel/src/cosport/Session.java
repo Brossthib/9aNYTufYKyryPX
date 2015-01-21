@@ -3,12 +3,11 @@ package cosport;
 
 import java.util.Collection;
 
-import javax.ejb.Singleton;
+import javax.ejb.Stateful;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-import javax.persistence.Table;
 
-@Singleton
+@Stateful
 public class Session {
 	
 	@PersistenceContext
@@ -81,5 +80,15 @@ public class Session {
 
 	public void setUtilisateur(Personne utilisateur) {
 		this.utilisateur = utilisateur;
+	}
+	
+	public void modifierUtilisateur(Personne p) {
+		Personne pMod = em.find(Personne.class, utilisateur.getId());
+		pMod.setPseudo(p.getPseudo());
+		pMod.setPrenom(p.getPrenom());
+		pMod.setNom(p.getNom());
+		pMod.setGenre(p.getGenre());
+		pMod.setMdp(p.getMdp());
+
 	}
 }

@@ -3,7 +3,6 @@
     <%@ page import="java.util.*,cosport.*" %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
-<html>
 	<head>
 		<title>Co sport</title>
 		<meta http-equiv="content-type" content="text/html; charset=utf-8" />
@@ -72,8 +71,7 @@
 						</h2>
 						<form method="post" action="serv1">
 							<input type="hidden" name="op" value="Deposer annonce" />
-							
-							Sport : <input type= "text" name="sport" /> <br/>
+							Sport2 : <input type= "text" name="sport" /> <br/>
 							Lieu : <input type ="text" name = "lieu" /> <br/>
 							Nombre   maximum   de   participants : <input type ="text" name = "nb" /> <br/>
 							

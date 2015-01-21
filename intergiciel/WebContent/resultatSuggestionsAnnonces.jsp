@@ -2,6 +2,7 @@
     pageEncoding="UTF-8"%>
     <%@ page import="java.util.*,cosport.*" %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+
 <html>
 	<head>
 		<title>Co sport</title>
@@ -27,29 +28,11 @@
 
 		<!-- Header -->
 			<header id="header" class="alt">
-				<h1><a href="serv1?op=index">Co Sport</a> by us</h1>
+				<h1><a href="index.html">Co Sport</a> by us</h1>
 				<nav id="nav">
-				<%Personne user = (Personne) request.getAttribute("User"); %>
 					<ul>
-						<li><a href="serv1?op=index">Home</a></li>
-						<%if (user != null) { %>
-						<%Collection<Annonce> annParticipe = user.getParticipeIci(); %>
-						<li><a href="" class="icon fa-angle-down"><%=user.getPseudo() %></a>
-							<ul>
-								<li><a href="serv1?op=profil">Profil</a></li>
-								<li>
-									<a href="serv1?op=mesAnnonces">Mes annonces</a>
-									<ul>
-										<%for (Annonce a : annParticipe) {%>
-										<li><a href="serv1?op=afficherAnnonce&annonce=<%=a.getIdString()%>"><%=a.getNom() %></a></li>
-										<%} %>
-									</ul>									
-								<li><a href="serv1?op=deconnecter">Me deconnecter</a></li>
-							</ul>
-						</li>
-						<%} else {%>
-						<li><a href="serv1?op=connectionjsp" class="button">Se connecter</a></li>
-						<%} %>
+						<li><a href="index.html">Home</a></li>
+						<li><a href="#" class="button">Sign Up</a></li>
 					</ul>
 				</nav>
 			</header>
@@ -65,42 +48,56 @@
 		
 				<section class="box special">
 					<header class="major">
-						<h2>Resultats de la recherche :</h2>
-													
-						<%Collection<Annonce> ann = (Collection<Annonce>) request.getAttribute("annonces");%>
+					
 						
-						<% if (ann.isEmpty()){%>
-							<p>Il n'y a pas d'annonces, désolé</p>
-							<%} %>
-						<ul>
-						<%for(Annonce p : ann){%>
-							<li>
-							<b><a href="serv1?op=afficherAnnonce&annonce=<%=p.getIdString()%>"><%=p.getNom().toString()%></a></b><br/>
-							<%=p.getSport().toString()%><br/>
-							<%=p.getLieu().getNom().toString()%><br/><br/>
-							<!--  
-							<form method="post" action="serv1">
-								<input type="hidden" name="op" value="afficher annonce" />
-								<input type="hidden" name="annonce" value=<%=p.getIdString()%> />
-								<input type="submit" value="Plus de détails" /><br/>
-							</form>
-							-->
-							</li>
-							
-						<%}%>
-						</ul>
+						<h2>Suggestions Annonces </h2>
+						
+					<%Collection<Annonce> anno = (Collection<Annonce>) request.getAttribute("annonces");%>
+						<%for(Annonce ann : anno){%>
 						<p>
-						<a href="serv1?op=index" class="button"/>Retour à l'index</a><br/>
-						<a href="serv1?op=deposer" class="button">Créer une nouvelle annonce</a><br/>
-						<!--TODO modifier en fonction de si on a accédé a cette page depuis recherche ou depuis deposer-->
-						</p>
+						<b><%=ann.getNom() %></b>
+						<ul>
+						<li> Déposée par : <%=ann.getDeposeur().getPseudo() %></li>
+						<li> Date : 27/11/2016</li>
+						<li> Lieu : <%=ann.getLieu().getNom() %></li>
+						<li> Sport : <%=ann.getSport() %></li>
+						<li> Participants (<%=ann.getParticipants().size() %>/<%=ann.getNbMaxParticipant() %>)
+							<ul>
+							<%for(Personne p : ann.getParticipants()){%>
+								<li>
+								<b><%=p.getPseudo()%></b><br/>
+								</li>
+							<%}%>
+							</ul>
+						</li>
+						
+						</ul></p>
 					</header>
-					<span class="image featured"><img src="images/Sport-Quote.jpg" alt="" /></span>
-				</section>						
-
+					<p><a href="pagePayement.html" class="button">Participer privé</a>
+					<form method="post" action="serv1">
+								<input type="hidden" name="op" value="participer" />
+								<input type="hidden" name="annonce" value=<%=ann.getId() %> />
+								<input type="submit" value="Participer public" /><br/>
+					</form>
+					</p>
+					<%}%>
+					<span class="image featured"><img src="images/pic01.jpg" alt="" /></span>
+				</section>
+					
+					<%Annonce a = (Annonce) request.getAttribute("annonce"); %>
+					<form method="post" action="serv1">
+						<input type="hidden" name="continuer" value="true" />
+						<input type="hidden" name="op" value="Deposer annonce" />
+						<input type="hidden" name="sport" value="<%=a.getSport() %>" />
+						<input type="hidden" name="lieu" value="<%=a.getLieu() %>" />
+						<input type="hidden" name="nb" value="<%=a.getNbMaxParticipant() %>" />
+						<input type="submit" value="Deposer annonce" /><br/>	
+					</form>
+						
+								
 			</section>
 			
-
+			
 			
 		<!-- Footer -->
 			<footer id="footer">
@@ -113,7 +110,7 @@
 					<li><a href="#" class="icon fa-google-plus"><span class="label">Google+</span></a></li>
 				</ul>
 				<ul class="copyright">
-					<li>&copy; Co sport. All rights reserved.</li><li>Design: <a href="http://html5up.net">HTML5 UP</a></li>
+					<li>&copy; Cosport. All rights reserved.</li><li>Design: <a href="http://html5up.net">HTML5 UP</a></li>
 				</ul>
 			</footer>
 
