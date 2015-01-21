@@ -1,6 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
-    <%@ page import="java.util.*,cosport.*" %>
+<%@ page import="java.util.*,cosport.*" %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 	<head>
@@ -32,8 +32,8 @@
 				<%Personne user = (Personne) request.getAttribute("User"); %>
 					<ul>
 						<li><a href="serv1?op=index">Home</a></li>
-						<%if (user != null) { %>
 						<%Collection<Annonce> annParticipe = user.getParticipeIci(); %>
+						<%Collection<Annonce> annCree = user.getAnnonces(); %>
 						<li><a href="" class="icon fa-angle-down"><%=user.getPseudo() %></a>
 							<ul>
 								<li><a href="serv1?op=profil">Profil</a></li>
@@ -47,9 +47,6 @@
 								<li><a href="serv1?op=deconnecter">Me deconnecter</a></li>
 							</ul>
 						</li>
-						<%} else {%>
-						<li><a href="serv1?op=connectionjsp" class="button">Se connecter</a></li>
-						<%} %>
 					</ul>
 				</nav>
 			</header>
@@ -60,32 +57,47 @@
 				<p>Another fine responsive way to be awesome !!</p>
 			</section>
 
-
-
 		<!-- Main -->
 			<section id="main" class="container">
 		
 				<section class="box special">
 					<header class="major">
-						<%int status = (Integer) request.getAttribute("success"); %>
-						<h2>Connectez vous !</h2>
-						<p>
-						<form method="post" action="serv1">
-							<input type="hidden" name="op" value="connection" />							
-								Nom d'utilisateur : <input type= "text" name="pseudo" /> <br/>
-								Mot de passe : <input type="password" name="motP" /><br/>
-								<%if (status == 0) {%>
-								<span style="color : red">Mauvais mot de passe ou nom d'utilisateur</span><br/>
-								<%} %>
-								<!--  Lieu : <input type ="text" name = "lieu" /> <br/>	-->						
-							<input type="submit" value="Se connecter" />
-						</form>
-						
+						<h2>Bonjour, <%=user.getPseudo() %></h2>
+																			
+						<p>Nom d'utilisateur : <%=user.getPseudo() %><br/>
+						Nom : <%=user.getNom() %><br/>
+						Prenom : <%=user.getPrenom() %><br/>
+						<a href="serv1?op=modifier" class="button"/>Modifier le profil</a></p><br/>
 					</header>
-					<span class="image featured"><img src="images/sports-motivational.jpg" alt="" /></span>
-				</section>
-						
+				</section>						
+
 			</section>
+			
+			
+			<section class="box special features">
+					<div class="features-row">
+						<section>
+							<span class="icon major fa-bolt accent2"></span>
+							<h3>Prochaines annonces :</h3>
+							<p><%for(Annonce p : annParticipe){%>
+							<li>
+							<b><%=p.getNom().toString()%></b><br/>
+							</li>
+						<%}%></p>
+						</section>
+						
+						<section>
+							<span class="icon major fa-area-chart accent3"></span>
+							<h3>Annonces déposées par moi :</h3>
+							<p><%for(Annonce p : annCree){%>
+							<li>
+							<b><%=p.getNom().toString()%></b><br/>
+							</li>
+						<%}%></p>
+						</section>
+					</div>
+				</section>
+
 			
 		<!-- Footer -->
 			<footer id="footer">

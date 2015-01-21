@@ -62,32 +62,38 @@ public class serv1 extends HttpServlet {
 		
 		String sop = request.getParameter("op");
 		
+		
+		if(sop.equals("deposer")){
+			request.setAttribute("success", 1);
+			this.getServletContext().getRequestDispatcher("/deposer.jsp").forward(request, response);
+		}
+		
 		if(sop.equals("Deposer annonce")){
 			//reflechir à comment obtenir la personne connectée pour lui associer l'annonce
 			String sport = request.getParameter("sport");
 			String lieu = request.getParameter("lieu");
 			String nbp = request.getParameter("nb");
-			System.out.println(nbp);
-			
+			int nb = Integer.parseInt(nbp);
+
 			//Si le sport entré existe
 			try {
 
 				//convertir la String sport en l'objet Sport
 				Sport s = Sport.valueOf(sport);
 				
-				if(lieu.equals("")) {
-					this.getServletContext().getRequestDispatcher("/failedRequest.html").forward(request, response);
+				if(lieu.equals("") || nb < 2) {
+					request.setAttribute("success", 0);
+					this.getServletContext().getRequestDispatcher("/deposer.jsp").forward(request, response);
 				}
 				else {
 						//On doit être connecté pour pouvoir déposer une annonce
 					if (session.isConnecte()) {
 		
 						Lieu l = fl.trouverLieu(lieu);
-						int nb = Integer.parseInt(nbp);
 						Personne p = session.getUtilisateur();
 						fa.ajouterAnnonce(s,l,p,nb);
-						//this.getServletContext().getRequestDispatcher("/serv1?op=lister").forward(request, response);
-						this.getServletContext().getRequestDispatcher("/index.jsp").forward(request, response);
+						this.getServletContext().getRequestDispatcher("/serv1?op=lister").forward(request, response);
+						//this.getServletContext().getRequestDispatcher("/index.jsp").forward(request, response);
 					}
 					else {
 						this.getServletContext().getRequestDispatcher("/connection.jsp").forward(request, response);
@@ -95,7 +101,8 @@ public class serv1 extends HttpServlet {
 				}
 			//Si le sport entré n'existe pas
 			}catch (Exception e) {
-				this.getServletContext().getRequestDispatcher("/failedRequest.html").forward(request, response);
+				request.setAttribute("success", 0);
+				this.getServletContext().getRequestDispatcher("/deposer.jsp").forward(request, response);
 			}
 
 		}
@@ -135,6 +142,7 @@ public class serv1 extends HttpServlet {
 			String pseudo = request.getParameter("pseudo");
 			String mdp = request.getParameter("motP");
 			if (session.connection(pseudo, mdp)) {
+				request.setAttribute("User", session.getUtilisateur());
 				this.getServletContext().getRequestDispatcher("/index.jsp").forward(request, response);
 			}
 			else {
@@ -162,6 +170,7 @@ public class serv1 extends HttpServlet {
 		
 		if (sop.equals("deconnecter")) {
 			session.deconnection();
+			request.setAttribute("User", null);
 			this.getServletContext().getRequestDispatcher("/index.jsp").forward(request, response);
 		}
 		
@@ -198,6 +207,10 @@ public class serv1 extends HttpServlet {
 			//On indique qu'il s'agit du premier essai
 			request.setAttribute("success", 1);
 			this.getServletContext().getRequestDispatcher("/connection.jsp").forward(request, response);
+		}
+		
+		if (sop.equals("profil")) {	
+			this.getServletContext().getRequestDispatcher("/utilisateur.jsp").forward(request, response);
 		}
 		
 	}

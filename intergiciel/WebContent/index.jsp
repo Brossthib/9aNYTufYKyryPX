@@ -37,9 +37,9 @@
 						<%Collection<Annonce> annParticipe = user.getParticipeIci(); %>
 						<li><a href="" class="icon fa-angle-down"><%=user.getPseudo() %></a>
 							<ul>
-								<li><a href="profil.jsp">Profil</a></li>
+								<li><a href="serv1?op=profil">Profil</a></li>
 								<li>
-									<a href="">Mes annonces</a>
+									<a href="serv1?op=mesAnnonces">Mes annonces</a>
 									<ul>
 										<%for (Annonce a : annParticipe) {%>
 										<li><a href="#"><%=a.getNom() %></a></li>
@@ -61,10 +61,10 @@
 				<p>Another fine responsive way to be awesome !!</p>
 				<ul class="actions">
 					<li><a href="inscription.html" class="button special">S'inscrire</a></li>
-					<li><a href="serv1?op=connectionjsp" class="button">Se connecter</a></li><br/>
-					<li><a href="deposer.html" class="button">Deposer une annonce</a></li>
+					<%if (user == null) { %><li><a href="serv1?op=connectionjsp" class="button">Se connecter</a></li><%} %><br/>
+					<li><a href="serv1?op=deposer" class="button">Deposer une annonce</a></li>
 					<li><a href="serv1?op=lister" class="button">Consulter les annonces</a></li><br/>	
-					<li><a href="serv1?op=admin" class="button">Connection rapide + crée 2eme memebre pseudo : admin, mdp : a</a></li>	<br/>
+					<li><a href="serv1?op=admin" class="button">Connection rapide (admin->a et user->b)</a></li>	<br/>
 					<li><a href="serv1?op=annonce1" class="button">Deposer Annonce préfabriquée</a></li>									
 				</ul>
 			</section>

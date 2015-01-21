@@ -3,9 +3,9 @@
     <%@ page import="java.util.*,cosport.*" %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
+<html>
 	<head>
 		<title>Co sport</title>
-		<link rel="shortcut icon" href="images/rsz_cool.png" />
 		<meta http-equiv="content-type" content="text/html; charset=utf-8" />
 		<meta name="description" content="" />
 		<meta name="keywords" content="" />
@@ -32,8 +32,8 @@
 				<%Personne user = (Personne) request.getAttribute("User"); %>
 					<ul>
 						<li><a href="serv1?op=index">Home</a></li>
-						<%if (user != null) { %>
 						<%Collection<Annonce> annParticipe = user.getParticipeIci(); %>
+						<%Collection<Annonce> annCree = user.getAnnonces(); %>
 						<li><a href="" class="icon fa-angle-down"><%=user.getPseudo() %></a>
 							<ul>
 								<li><a href="serv1?op=profil">Profil</a></li>
@@ -47,9 +47,6 @@
 								<li><a href="serv1?op=deconnecter">Me deconnecter</a></li>
 							</ul>
 						</li>
-						<%} else {%>
-						<li><a href="serv1?op=connectionjsp" class="button">Se connecter</a></li>
-						<%} %>
 					</ul>
 				</nav>
 			</header>
@@ -57,35 +54,38 @@
 		<!-- Banner -->
 			<section id="banner">
 				<h2>Co Sport</h2>
+				<%int status = (Integer) request.getAttribute("success"); %>
+				<%if  (status == 1) {%>
 				<p>Another fine responsive way to be awesome !!</p>
-			</section>
-
-
+				<%} else { %>
+				<p>Votre requête est invalide !<br/>
+				Remplissez bien tous les champs</p>
+				<%} %>
+				</section>
 
 		<!-- Main -->
 			<section id="main" class="container">
 		
 				<section class="box special">
 					<header class="major">
-						<%int status = (Integer) request.getAttribute("success"); %>
-						<h2>Connectez vous !</h2>
-						<p>
+						<h2>Remplir le formulaire pour déposer une annonce
+						</h2>
 						<form method="post" action="serv1">
-							<input type="hidden" name="op" value="connection" />							
-								Nom d'utilisateur : <input type= "text" name="pseudo" /> <br/>
-								Mot de passe : <input type="password" name="motP" /><br/>
-								<%if (status == 0) {%>
-								<span style="color : red">Mauvais mot de passe ou nom d'utilisateur</span><br/>
-								<%} %>
-								<!--  Lieu : <input type ="text" name = "lieu" /> <br/>	-->						
-							<input type="submit" value="Se connecter" />
-						</form>
-						
+							<input type="hidden" name="op" value="Deposer annonce" />
+							
+							Sport : <input type= "text" name="sport" /> <br/>
+							Lieu : <input type ="text" name = "lieu" /> <br/>
+							Nombre   maximum   de   participants : <input type ="text" name = "nb" /> <br/>
+							
+							<input type="submit" value="Deposer annonce" />
+							</form>
+							<p><a href="serv1?op=lister" class="button">Consulter les annonces</a></p>								
 					</header>
-					<span class="image featured"><img src="images/sports-motivational.jpg" alt="" /></span>
-				</section>
-						
-			</section>
+					<span class="image featured"><img src="images/champion3.jpg" alt="" /></span>
+				</section>						
+		</section>
+			
+
 			
 		<!-- Footer -->
 			<footer id="footer">
