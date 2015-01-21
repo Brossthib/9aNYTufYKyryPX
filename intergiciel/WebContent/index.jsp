@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+     <%@ page import="java.util.*,cosport.*" %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 
 <html>
@@ -27,11 +28,29 @@
 
 		<!-- Header -->
 			<header id="header" class="alt">
-				<h1><a href="index.html">Co Sport</a> by us</h1>
+				<h1><a href="serv1?op=index">Co Sport</a> by us</h1>
 				<nav id="nav">
+				<%Personne user = (Personne) request.getAttribute("User"); %>
 					<ul>
-						<li><a href="index.html">Home</a></li>
-						<li><a href="#" class="button">Se connecter</a></li>
+						<li><a href="serv1?op=index">Home</a></li>
+						<%if (user != null) { %>
+						<%Collection<Annonce> annParticipe = user.getParticipeIci(); %>
+						<li><a href="" class="icon fa-angle-down"><%=user.getPseudo() %></a>
+							<ul>
+								<li><a href="profil.jsp">Profil</a></li>
+								<li>
+									<a href="">Mes annonces</a>
+									<ul>
+										<%for (Annonce a : annParticipe) {%>
+										<li><a href="#"><%=a.getNom() %></a></li>
+										<%} %>
+									</ul>									
+								<li><a href="serv1?op=deconnecter">Me deconnecter</a></li>
+							</ul>
+						</li>
+						<%} else {%>
+						<li><a href="serv1?op=connectionjsp" class="button">Se connecter</a></li>
+						<%} %>
 					</ul>
 				</nav>
 			</header>
@@ -42,10 +61,11 @@
 				<p>Another fine responsive way to be awesome !!</p>
 				<ul class="actions">
 					<li><a href="inscription.html" class="button special">S'inscrire</a></li>
-					<li><a href="connection.html" class="button">Se connecter</a></li><br/>
+					<li><a href="serv1?op=connectionjsp" class="button">Se connecter</a></li><br/>
 					<li><a href="deposer.html" class="button">Deposer une annonce</a></li>
-					<li><a href="serv1?op=lister" class="button">Consulter les annonces</a></li>	
-					<li><a href="serv1?op=admin" class="button">Connection rapide : pseudo : admin, mdp : a</a></li>									
+					<li><a href="serv1?op=lister" class="button">Consulter les annonces</a></li><br/>	
+					<li><a href="serv1?op=admin" class="button">Connection rapide + crée 2eme memebre pseudo : admin, mdp : a</a></li>	<br/>
+					<li><a href="serv1?op=annonce1" class="button">Deposer Annonce préfabriquée</a></li>									
 				</ul>
 			</section>
 

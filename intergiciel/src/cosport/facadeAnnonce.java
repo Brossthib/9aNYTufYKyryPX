@@ -31,10 +31,6 @@ public class facadeAnnonce {
 
 	}
 	
-	public void majAnnonce(Annonce nouvelle, Annonce ancienne) {
-		em.remove(ancienne);
-		em.persist(nouvelle);
-	}
 	
 /*	public void supprimerAnnonce(Annonce a){
 		em.remove(a);
@@ -72,6 +68,23 @@ public class facadeAnnonce {
 			}
 		}
 		return null;
+	}
+	
+	/**
+	 * Rajoute un participant si possible
+	 * @param p le participant
+	 * @return true si j'ajout a marché, false sinon
+	 */
+	public boolean ajouterParticipant(int idp, int ida){
+		Personne p = em.find(Personne.class, idp);
+		Annonce a = em.find(Annonce.class, ida);
+		Collection<Personne> part = a.getParticipants();
+		if (a.participants.size() < a.getNbMaxParticipant() && !(part.contains(p))) {
+			a.participants.add(p);
+			return true;
+		}
+		else
+			return false;
 	}
 	
 }

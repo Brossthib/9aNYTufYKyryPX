@@ -87,10 +87,10 @@ public class serv1 extends HttpServlet {
 						Personne p = session.getUtilisateur();
 						fa.ajouterAnnonce(s,l,p,nb);
 						//this.getServletContext().getRequestDispatcher("/serv1?op=lister").forward(request, response);
-						this.getServletContext().getRequestDispatcher("/index.html").forward(request, response);
+						this.getServletContext().getRequestDispatcher("/index.jsp").forward(request, response);
 					}
 					else {
-						this.getServletContext().getRequestDispatcher("/connection.html").forward(request, response);
+						this.getServletContext().getRequestDispatcher("/connection.jsp").forward(request, response);
 					}
 				}
 			//Si le sport entré n'existe pas
@@ -109,7 +109,7 @@ public class serv1 extends HttpServlet {
 		if(sop.equals("afficher annonce")){
 			String ann = request.getParameter("annonce");
 			if (fa.trouverAnnonce(ann)==null)
-				this.getServletContext().getRequestDispatcher("/index.html").forward(request, response);
+				this.getServletContext().getRequestDispatcher("/index.jsp").forward(request, response);
 			else{
 			request.setAttribute("annonce", fa.trouverAnnonce(ann));
 			this.getServletContext().getRequestDispatcher("/resultat.jsp").forward(request, response);
@@ -122,23 +122,25 @@ public class serv1 extends HttpServlet {
 			session.inscription(p1);
 			session.inscription(p2);
 			session.connection("admin", "a");
-			this.getServletContext().getRequestDispatcher("/index.html").forward(request, response);
+			this.getServletContext().getRequestDispatcher("/index.jsp").forward(request, response);
 		}
 		
 		if (sop.equals("annonce1")) {
 			fa.ajouterAnnonce(Sport.Tennis, new Lieu("Paris"), session.getUtilisateur(),2);
 			fa.ajouterAnnonce(Sport.Foot, new Lieu("Toulouse"), session.getUtilisateur(),24);
-			this.getServletContext().getRequestDispatcher("/index.html").forward(request, response);
+			this.getServletContext().getRequestDispatcher("/index.jsp").forward(request, response);
 		}
 		
 		if (sop.equals("connection")) {
 			String pseudo = request.getParameter("pseudo");
 			String mdp = request.getParameter("motP");
 			if (session.connection(pseudo, mdp)) {
-				this.getServletContext().getRequestDispatcher("/index.html").forward(request, response);
+				this.getServletContext().getRequestDispatcher("/index.jsp").forward(request, response);
 			}
 			else {
-				this.getServletContext().getRequestDispatcher("/connection.html").forward(request, response);
+				//On indique que ce n'est pas le premier essai
+				request.setAttribute("success", 0);
+				this.getServletContext().getRequestDispatcher("/connection.jsp").forward(request, response);
 			}
 		}
 		
@@ -151,7 +153,7 @@ public class serv1 extends HttpServlet {
 			Genre genre = Genre.valueOf(g);
 			Personne p = new Personne(pseudo, nom, prenom, genre, mdp);
 			if (session.inscription(p)) {
-				this.getServletContext().getRequestDispatcher("/index.html").forward(request, response);
+				this.getServletContext().getRequestDispatcher("/index.jsp").forward(request, response);
 			}
 			else {
 				this.getServletContext().getRequestDispatcher("/inscription.html").forward(request, response);
@@ -160,25 +162,43 @@ public class serv1 extends HttpServlet {
 		
 		if (sop.equals("deconnecter")) {
 			session.deconnection();
-			this.getServletContext().getRequestDispatcher("/index.html").forward(request, response);
+			this.getServletContext().getRequestDispatcher("/index.jsp").forward(request, response);
 		}
 		
 		if (sop.equals("participer")) {
 			String idAnnonce = request.getParameter("annonce");
-			Annonce ann = fa.trouverAnnonce(idAnnonce);
-			if (ann.ajouterParticipant(session.getUtilisateur())) {
-				fa.majAnnonce(ann, fa.trouverAnnonce(idAnnonce));
+			int ida = Integer.parseInt(idAnnonce);
+			if (fa.ajouterParticipant(session.getUtilisateur().getId(),ida)) {
+				Annonce ann = fa.trouverAnnonce(idAnnonce);
 				request.setAttribute("annonce", ann);
 				this.getServletContext().getRequestDispatcher("/resultat.jsp").forward(request, response);
 			}
 			else
-				this.getServletContext().getRequestDispatcher("/index.html").forward(request, response);
+				this.getServletContext().getRequestDispatcher("/index.jsp").forward(request, response);
 		}
 		
 		if (sop.equals("mesAnnonces")) {
-			this.getServletContext().getRequestDispatcher("/listerPerso.jsp").forward(request, response);
+			if (session.isConnecte()){
+				Personne p = session.getUtilisateur();
+				Collection<Annonce> ann = p.getParticipeIci();
+				System.out.println("Nombre d'annonces :" + ann.size());
+				request.setAttribute("annonces", ann);
+				this.getServletContext().getRequestDispatcher("/listerPerso.jsp").forward(request, response);
+			}
+			else
+				this.getServletContext().getRequestDispatcher("/index.jsp").forward(request, response);
+
+		}
+		
+		if (sop.equals("index")) {
+			this.getServletContext().getRequestDispatcher("/index.jsp").forward(request, response);
 		}
 
+		if (sop.equals("connectionjsp")) {
+			//On indique qu'il s'agit du premier essai
+			request.setAttribute("success", 1);
+			this.getServletContext().getRequestDispatcher("/connection.jsp").forward(request, response);
+		}
 		
 	}
 }

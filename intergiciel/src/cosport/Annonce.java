@@ -113,19 +113,7 @@ public class Annonce {
 	}
 	
 
-	/**
-	 * Rajoute un participant si possible
-	 * @param p le participant
-	 * @return true si j'ajout a marché, false sinon
-	 */
-	public boolean ajouterParticipant(Personne p){
-		if (this.participants.size() < this.nbMaxParticipant) {
-			this.participants.add(p);
-			return true;
-		}
-		else
-			return false;
-	}
+
 	public void supprimerParticipant(Personne p){
 		this.participants.remove(p);
 	}

@@ -60,48 +60,32 @@
 				<p>Another fine responsive way to be awesome !!</p>
 			</section>
 
+
+
 		<!-- Main -->
 			<section id="main" class="container">
 		
 				<section class="box special">
 					<header class="major">
-						<h2>Détails de l'annonce :</h2>
-						
-						<%Annonce ann = (Annonce) request.getAttribute("annonce"); %>
-						<%Collection<Personne> participants = ann.getParticipants(); %>
-						
+						<%int status = (Integer) request.getAttribute("success"); %>
+						<h2>Connectez vous !</h2>
 						<p>
-						<b><%=ann.getNom() %></b>
-						<ul>
-						<li> Déposée par : <%=ann.getDeposeur().getPseudo() %></li>
-						<li> Date : 27/11/2016</li>
-						<li> Lieu : <%=ann.getLieu().getNom() %></li>
-						<li> Sport : <%=ann.getSport() %></li>
-						<li> Participants (<%=participants.size() %>/<%=ann.getNbMaxParticipant() %>)
-							<ul>
-							<%for(Personne p : participants){%>
-								<li>
-								<b><%=p.getPseudo()%></b><br/>
-								</li>
-							<%}%>
-							</ul>
-						</li>
+						<form method="post" action="serv1">
+							<input type="hidden" name="op" value="connection" />							
+								Nom d'utilisateur : <input type= "text" name="pseudo" /> <br/>
+								Mot de passe : <input type="password" name="motP" /><br/>
+								<%if (status == 0) {%>
+								<span style="color : red">Mauvais mot de passe ou nom d'utilisateur</span><br/>
+								<%} %>
+								<!--  Lieu : <input type ="text" name = "lieu" /> <br/>	-->						
+							<input type="submit" value="Se connecter" />
+						</form>
 						
-						</ul></p>
 					</header>
-					<p><a href="pagePayement.html" class="button">Participer privé</a>
-					<form method="post" action="serv1">
-								<input type="hidden" name="op" value="participer" />
-								<input type="hidden" name="annonce" value=<%=ann.getId() %> />
-								<input type="submit" value="Participer public" /><br/>
-					</form>
-					</p>
-					<span class="image featured"><img src="images/pic01.jpg" alt="" /></span>
+					<span class="image featured"><img src="images/sports-motivational.jpg" alt="" /></span>
 				</section>
-									
+						
 			</section>
-			
-
 			
 		<!-- Footer -->
 			<footer id="footer">
@@ -114,7 +98,7 @@
 					<li><a href="#" class="icon fa-google-plus"><span class="label">Google+</span></a></li>
 				</ul>
 				<ul class="copyright">
-					<li>&copy; Cosport. All rights reserved.</li><li>Design: <a href="http://html5up.net">HTML5 UP</a></li>
+					<li>&copy; Co sport. All rights reserved.</li><li>Design: <a href="http://html5up.net">HTML5 UP</a></li>
 				</ul>
 			</footer>
 

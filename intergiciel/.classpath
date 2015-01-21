@@ -9,6 +9,6 @@
 	<classpathentry exported="true" kind="con" path="org.eclipse.jst.j2ee.internal.web.container"/>
 	<classpathentry exported="true" kind="con" path="org.eclipse.jst.j2ee.internal.module.container"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
-	<classpathentry kind="lib" path="/home/brossard/Documents/Projets_N7/intergiciel/com.springsource.org.hibernate.annotations-3.3.0.ga.jar"/>
+	<classpathentry kind="lib" path="/home/tbrossar/Documents/2A/Intergiciels/9aNYTufYKyryPX/com.springsource.org.hibernate.annotations-3.3.0.ga.jar"/>
 	<classpathentry kind="output" path="build/classes"/>
 </classpath>

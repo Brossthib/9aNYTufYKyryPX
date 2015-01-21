@@ -6,6 +6,7 @@ import java.util.Collection;
 import javax.ejb.Singleton;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.Table;
 
 @Singleton
 public class Session {
@@ -74,7 +75,8 @@ public class Session {
 	}
 
 	public Personne getUtilisateur() {
-		return utilisateur;
+		Personne p = em.find(Personne.class, utilisateur.getId());
+		return p;
 	}
 
 	public void setUtilisateur(Personne utilisateur) {

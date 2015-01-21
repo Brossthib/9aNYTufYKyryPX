@@ -38,17 +38,17 @@
 							<ul>
 								<li><a href="profil.jsp">Profil</a></li>
 								<li>
-									<a href="listerPerso.jsp">Mes annonces</a></li>
+									<a href="">Mes annonces</a>
 									<ul>
-										<%for (Annonce a : annParticipe) {%></ul>
-										<li><a href=""><%=a.getNom() %></a></li>
+										<%for (Annonce a : annParticipe) {%>
+										<li><a href="#"><%=a.getNom() %></a></li>
 										<%} %>
 									</ul>									
 								<li><a href="serv1?op=deconnecter">Me deconnecter</a></li>
 							</ul>
 						</li>
 						<%} else {%>
-						<li><a href="connection.html" class="button">Se connecter</a></li>
+						<li><a href="serv1?op=connectionjsp" class="button">Se connecter</a></li>
 						<%} %>
 					</ul>
 				</nav>
@@ -59,16 +59,15 @@
 				<h2>Co Sport</h2>
 				<p>Another fine responsive way to be awesome !!</p>
 			</section>
-
-		<!-- Main -->
+			
+			<!-- Main -->
 			<section id="main" class="container">
 		
 				<section class="box special">
 					<header class="major">
 						<h2>Resultats de la recherche :</h2>
-						
-						<%Personne pers = (Personne) request.getAttribute("User");%>							
-						<%Collection<Annonce> ann = pers.getAnnonces();%>
+													
+						<%Collection<Annonce> ann = (Collection<Annonce>) request.getAttribute("annonces");%>
 						
 						<% if (ann.isEmpty()){%>
 							<p>Il n'y a pas d'annonces, désolé</p>
@@ -98,8 +97,6 @@
 				</section>						
 
 			</section>
-			
-
 			
 		<!-- Footer -->
 			<footer id="footer">
