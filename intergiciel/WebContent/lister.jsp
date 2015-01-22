@@ -57,7 +57,7 @@
 		<!-- Banner -->
 			<section id="banner">
 				<h2>Co Sport</h2>
-				<p>Another fine responsive way to be awesome !!</p>
+					<p>Le sport, ça se pratique à plusieurs ! <br/></p>	
 			</section>
 
 		<!-- Main -->
@@ -118,7 +118,7 @@
 					<li><a href="#" class="icon fa-google-plus"><span class="label">Google+</span></a></li>
 				</ul>
 				<ul class="copyright">
-					<li>&copy; Co sport. All rights reserved.</li><li>Design: <a href="http://html5up.net">HTML5 UP</a></li>
+					<li>&copy; Co sport. All rights reserved.</li>
 				</ul>
 			</footer>
 

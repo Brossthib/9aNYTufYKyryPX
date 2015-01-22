@@ -36,6 +36,10 @@ public class facadeAnnonce {
 
 	}
 	
+	public void ajouterAnnonce(Annonce a){
+	em.persist(a);
+	}
+	
 	
 /*	public void supprimerAnnonce(Annonce a){
 		em.remove(a);
@@ -166,6 +170,16 @@ public class facadeAnnonce {
 	}
 
 
+	public boolean existsT(String s) {
+		Collection<Terrain> p = listerTerrain();
+		for (Terrain t : p) {
+			if (t.getNom().equals(s))
+				return true;
+		}
+		return false;
+	}
+	
+	
 	public Collection<Terrain> listerTerrain() {
 		ArrayList<Terrain> l = (ArrayList<Terrain>) em.createQuery("select l from Terrain l", Terrain.class).getResultList();
 		return l;

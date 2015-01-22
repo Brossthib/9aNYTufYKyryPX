@@ -82,6 +82,16 @@ public class Session {
 		this.utilisateur = utilisateur;
 	}
 	
+	public boolean exists(String n) {
+		Collection<Personne> p = getUtilisateurs();
+		for (Personne pers : p) {
+			if (pers.getPseudo().equals(n))
+				return true;
+		}
+		return false;
+	}
+
+	
 	public void modifierUtilisateur(Personne p) {
 		Personne pMod = em.find(Personne.class, utilisateur.getId());
 		pMod.setPseudo(p.getPseudo());

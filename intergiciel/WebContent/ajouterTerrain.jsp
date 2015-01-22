@@ -57,7 +57,12 @@
 		<!-- Banner -->
 			<section id="banner">
 				<h2>Co Sport</h2>
-				<p>Another fine responsive way to be awesome !!</p>
+					<%if  ((Integer) request.getAttribute("status") == 1) {%>
+					<p>Le sport, ça se pratique à plusieurs ! <br/></p>
+					<%} else { %>
+					<p>Votre requête est invalide !<br/>
+					Remplissez bien tous les champs</p>
+					<%} %>
 			</section>
 
 
@@ -71,7 +76,7 @@
 						<form method="post" action="serv1">
 							<input type="hidden" name="op" value="ajTerrain" />	
 								<%if ((Integer)request.getAttribute("status") == 2) {%>
-								<span style="color : red">Nom d'utilisateur déjà pris</span><br/>	
+								<span style="color : red">Ce terrain existe déjà</span><br/>	
 								<%} %>	
 								Nom du terrain : <input type= "text" name="nom" /> <br/>		
 								Lieu : <input type= "text" name="lieu" /> <br/>
@@ -81,6 +86,9 @@
 								<input class="css-checkbox" type="radio" name="prive" value="True">Oui<br>
 								<input class="css-checkbox" type="radio" name="prive" value="False">Non	
 								<br/>
+								<%if ((Integer)request.getAttribute("status") == 0) {%>
+								<span style="color : red">Erreur, réessayez</span><br/>	
+								<%} %>	
 								
 							<input type="submit" value="Ajouter le terrain" />
 						</form>
@@ -101,7 +109,7 @@
 					<li><a href="#" class="icon fa-google-plus"><span class="label">Google+</span></a></li>
 				</ul>
 				<ul class="copyright">
-					<li>&copy; Co sport. All rights reserved.</li><li>Design: <a href="http://html5up.net">HTML5 UP</a></li>
+					<li>&copy; Co sport. All rights reserved.</li>
 				</ul>
 			</footer>
 

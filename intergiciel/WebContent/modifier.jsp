@@ -57,7 +57,12 @@
 		<!-- Banner -->
 			<section id="banner">
 				<h2>Co Sport</h2>
-				<p>Another fine responsive way to be awesome !!</p>
+					<%if  ((Integer) request.getAttribute("status") == 1) {%>
+					<p>Le sport, ça se pratique à plusieurs ! <br/></p>
+					<%} else { %>
+					<p>Votre requête est invalide !<br/>
+					Remplissez bien tous les champs</p>
+					<%} %>
 			</section>
 
 
@@ -68,7 +73,10 @@
 					<header class="major">
 						<h2>Modifiez votre profil :</h2>
 						<form method="post" action="serv1">
-							<input type="hidden" name="op" value="modifierProfil" />	
+							<input type="hidden" name="op" value="modifierProfil" />
+								<%if ((Integer)request.getAttribute("status") == 3) {%>
+								<span style="color : red">Nom d'utilisateur déjà pris</span><br/>	
+								<%} %>		
 								Nom d'utilisateur : <input type= "text" name="pseudo" value="<%=user.getPseudo() %>"/> <br/>		
 								Nom : <input type= "text" name="nom" value="<%=user.getNom() %>"/> <br/>
 								Prenom : <input type= "text" name="prenom" value="<%=user.getPrenom() %>"/> <br/>
@@ -86,7 +94,7 @@
 							<input type="submit" value="modifier votre profil" />
 						</form>
 					</header>
-					<span class="image featured"><img src="images/sports-motivational.jpg" alt="" /></span>
+					<span class="image featured"><img src="images/banner2.jpg" alt="" /></span>
 				</section>
 						
 			</section>
@@ -102,7 +110,7 @@
 					<li><a href="#" class="icon fa-google-plus"><span class="label">Google+</span></a></li>
 				</ul>
 				<ul class="copyright">
-					<li>&copy; Co sport. All rights reserved.</li><li>Design: <a href="http://html5up.net">HTML5 UP</a></li>
+					<li>&copy; Co sport. All rights reserved.</li>
 				</ul>
 			</footer>
 

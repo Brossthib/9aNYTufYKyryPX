@@ -57,7 +57,12 @@
 		<!-- Banner -->
 			<section id="banner">
 				<h2>Co Sport</h2>
-				<p>Another fine responsive way to be awesome !!</p>
+					<%if  ((Integer) request.getAttribute("status") == 1) {%>
+					<p>Le sport, ça se pratique à plusieurs ! <br/></p>
+					<%} else { %>
+					<p>Votre requête est invalide !<br/>
+					Remplissez bien tous les champs</p>
+					<%} %>
 			</section>
 
 
@@ -90,7 +95,7 @@
 							<input type="submit" value="S'inscrire" />
 						</form>
 					</header>
-					<span class="image featured"><img src="images/sports-motivational.jpg" alt="" /></span>
+					<span class="image featured"><img src="images/ban4.jpg" alt="" /></span>
 				</section>
 						
 			</section>
@@ -106,7 +111,7 @@
 					<li><a href="#" class="icon fa-google-plus"><span class="label">Google+</span></a></li>
 				</ul>
 				<ul class="copyright">
-					<li>&copy; Co sport. All rights reserved.</li><li>Design: <a href="http://html5up.net">HTML5 UP</a></li>
+					<li>&copy; Co sport. All rights reserved.</li>
 				</ul>
 			</footer>
 

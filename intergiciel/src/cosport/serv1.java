@@ -72,7 +72,7 @@ public class serv1 extends HttpServlet {
 		
 		
 		if(sop.equals("deposer")){
-			request.setAttribute("success", 1);
+			request.setAttribute("status", 1);
 			this.getServletContext().getRequestDispatcher("/deposer.jsp").forward(request, response);
 		}
 		
@@ -107,7 +107,7 @@ public class serv1 extends HttpServlet {
 				Sport s = fa.valueOf(sport);
 				
 				if(lieu.equals("") || nb < 2) {
-					request.setAttribute("success", 0);
+					request.setAttribute("status", 0);
 					this.getServletContext().getRequestDispatcher("/deposer.jsp").forward(request, response);
 				}
 				else {
@@ -117,10 +117,20 @@ public class serv1 extends HttpServlet {
 						Lieu l = fa.trouverLieu(lieu);
 						Terrain t = fa.chercherTerrain(idt);
 						Personne p = session.getUtilisateur();
-						
-						fa.ajouterAnnonce(s,l,p,nb,t,d.toString());
-						request.setAttribute("annonces", fa.listerAnnonces());
-						this.getServletContext().getRequestDispatcher("/lister.jsp").forward(request, response);
+						if (t.getLieu().getNom() != l.getNom()) {
+							request.setAttribute("status", 3);
+							this.getServletContext().getRequestDispatcher("/deposer.jsp").forward(request, response);
+						} else {
+							Annonce aAjouter = new Annonce(s,l,p,nb,t,d.toString());
+							fa.ajouterAnnonce(aAjouter);
+							if (t.getIsPrivate()) {
+								request.setAttribute("annonce", aAjouter);
+								this.getServletContext().getRequestDispatcher("/payement.jsp").forward(request, response);
+							}else {
+							request.setAttribute("annonces", fa.listerAnnonces());
+							this.getServletContext().getRequestDispatcher("/lister.jsp").forward(request, response);
+							}
+						}
 						
 					}
 					else {
@@ -129,7 +139,7 @@ public class serv1 extends HttpServlet {
 				}
 			//Si le sport entré n'existe pas
 			}catch (Exception e) {
-				request.setAttribute("success", 0);
+				request.setAttribute("status", 0);
 				this.getServletContext().getRequestDispatcher("/deposer.jsp").forward(request, response);
 			}
 
@@ -178,7 +188,7 @@ public class serv1 extends HttpServlet {
 			}
 			else {
 				//On indique que ce n'est pas le premier essai
-				request.setAttribute("success", 0);
+				request.setAttribute("status", 0);
 				this.getServletContext().getRequestDispatcher("/connection.jsp").forward(request, response);
 			}
 		}
@@ -222,20 +232,31 @@ public class serv1 extends HttpServlet {
 		}
 		
 		if (sop.equals("participer")) {
+			System.out.println("dans participer\n\n");
 			String idAnnonce = request.getParameter("annonce");
-			int ida = Integer.parseInt(idAnnonce);
-			if (fa.ajouterParticipant(session.getUtilisateur().getId(),ida)) {
+			try {
+				int ida = Integer.parseInt(idAnnonce);
 				Annonce ann = fa.trouverAnnonce(idAnnonce);
-				request.setAttribute("annonce", ann);
-				request.setAttribute("status", 1);
-				this.getServletContext().getRequestDispatcher("/resultat.jsp").forward(request, response);
+				System.out.println("Trouve  annonce\n\n");
+				if (fa.ajouterParticipant(session.getUtilisateur().getId(),ida)) {
+					System.out.println("dans if\n\n");
+					System.out.println("Trouve pas annonce\n\n");
+					request.setAttribute("annonce", fa.trouverAnnonce(idAnnonce));
+					request.setAttribute("status", 1);
+					this.getServletContext().getRequestDispatcher("/resultat.jsp").forward(request, response);
+				}
+				else {
+					request.setAttribute("annonce", ann);
+					request.setAttribute("status", 0);
+					this.getServletContext().getRequestDispatcher("/resultat.jsp").forward(request, response);
 			}
-			else
-				request.setAttribute("annonce", idAnnonce);
-				request.setAttribute("status", 0);
-				this.getServletContext().getRequestDispatcher("/resultat.jsp").forward(request, response);
+		} catch (Exception e) {
+			this.getServletContext().getRequestDispatcher("/index.jsp").forward(request, response);
+			}
 		}
 		
+			
+			
 		if (sop.equals("mesAnnonces")) {
 			if (session.isConnecte()){
 				Personne p = session.getUtilisateur();
@@ -255,7 +276,7 @@ public class serv1 extends HttpServlet {
 
 		if (sop.equals("connectionjsp")) {
 			//On indique qu'il s'agit du premier essai
-			request.setAttribute("success", 1);
+			request.setAttribute("status", 1);
 			this.getServletContext().getRequestDispatcher("/connection.jsp").forward(request, response);
 		}
 		
@@ -278,14 +299,13 @@ public class serv1 extends HttpServlet {
 			String g = request.getParameter("genre");
 			Genre genre = Genre.valueOf(g);
 			Personne pers = session.getUtilisateur();
-			if (mdp1.equals("") && mdp2.equals("") && mdpa.equals("")) {
+			System.out.println(session.exists(pseudo) + "  " + pseudo + "\n\n\n");
+			if (session.exists(pseudo)) {
+				request.setAttribute("status", 3);
+				this.getServletContext().getRequestDispatcher("/modifier.jsp").forward(request, response);
+			}
+			else if (mdp1.equals("") && mdp2.equals("") && mdpa.equals("")) {
 				Personne newPers = new Personne(pseudo,nom,prenom,genre,pers.getMdp());
-				session.modifierUtilisateur(newPers);
-				request.setAttribute("User", newPers);
-				this.getServletContext().getRequestDispatcher("/utilisateur.jsp").forward(request, response);
-		}
-			else if (mdp1.equals(mdp2) && pers.getMdp().equals(mdpa)) {
-				Personne newPers = new Personne(pseudo,nom,prenom,genre,mdp1);
 				session.modifierUtilisateur(newPers);
 				request.setAttribute("User", newPers);
 				this.getServletContext().getRequestDispatcher("/utilisateur.jsp").forward(request, response);
@@ -294,7 +314,14 @@ public class serv1 extends HttpServlet {
 				request.setAttribute("status", 0);
 				this.getServletContext().getRequestDispatcher("/modifier.jsp").forward(request, response);
 			}
-			else {
+		
+			else if (mdp1.equals(mdp2) && pers.getMdp().equals(mdpa)) {
+				Personne newPers = new Personne(pseudo,nom,prenom,genre,mdp1);
+				session.modifierUtilisateur(newPers);
+				request.setAttribute("User", newPers);
+				this.getServletContext().getRequestDispatcher("/utilisateur.jsp").forward(request, response);
+			} else
+			{
 				request.setAttribute("status", 2);
 				this.getServletContext().getRequestDispatcher("/modifier.jsp").forward(request, response);
 			}
@@ -322,8 +349,19 @@ public class serv1 extends HttpServlet {
 			}
 		}
 		
-		if (sop.equals("payer")) {
-			this.getServletContext().getRequestDispatcher("/payement.jsp").forward(request, response);
+		if (sop.equals("payer")) {				
+			
+			String ida = request.getParameter("annonce");
+			Integer idann = Integer.parseInt(ida);
+			Annonce ann = fa.trouverAnnonce(ida);
+			if (fa.ajouterParticipant(session.getUtilisateur().getId(),idann)) {
+				request.setAttribute("annonce", ann);				
+				this.getServletContext().getRequestDispatcher("/payement.jsp").forward(request, response);
+			} else {
+				request.setAttribute("annonce", ann);
+				request.setAttribute("status", 0);
+				this.getServletContext().getRequestDispatcher("/resultat.jsp").forward(request, response);
+			}
 		}
 		
 		if (sop.equals("terrainajout")) {
@@ -338,13 +376,19 @@ public class serv1 extends HttpServlet {
 				String s = request.getParameter("sport");
 				String p = request.getParameter("prive");
 				
-				Terrain t =	new Terrain(fa.trouverLieu(l), n, Boolean.valueOf(p));
-				Sport sp = fa.valueOf(s);
-				fa.ajouterTerrain(t);
-				fa.ajouterSportTerrain(sp.getId(), t.getId());
-				this.getServletContext().getRequestDispatcher("/index.jsp").forward(request, response);
+				if (fa.existsT(n)) {
+					request.setAttribute("status", 2);
+					this.getServletContext().getRequestDispatcher("/ajouterTerrain.jsp").forward(request, response);
+				} else {
+					Terrain t =	new Terrain(fa.trouverLieu(l), n, Boolean.valueOf(p));
+					Sport sp = fa.valueOf(s);
+					fa.ajouterTerrain(t);
+					fa.ajouterSportTerrain(sp.getId(), t.getId());
+					this.getServletContext().getRequestDispatcher("/index.jsp").forward(request, response);
+				}
 			} catch (Exception e) {
-				System.out.println("Terrain mal crée");
+				request.setAttribute("status", 0);
+				this.getServletContext().getRequestDispatcher("/ajouterTerrain.jsp").forward(request, response);
 			}
 			
 		}

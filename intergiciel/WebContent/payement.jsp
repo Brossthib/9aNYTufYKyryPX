@@ -66,6 +66,7 @@
 				<section class="box special">
 					<header class="major">
 						<h2>Payement en ligne :</h2>
+						<%Annonce ann = (Annonce) request.getAttribute("annonce"); %>
 																	
 						<form action="https://www.paypal.com/cgi-bin/webscr" method="post" target="_top">
 							<input type="hidden" name="cmd" value="_xclick">
@@ -81,10 +82,8 @@
 							<input type="hidden" name="shipping" value="0.00">
 							<input type="hidden" name="bn" value="PP-BuyNowBF:btn_paynowCC_LG.gif:NonHostedGuest">
 							<table>
-							<tr><td><input type="hidden" name="on0" value="prix">prix</td></tr><tr><td><select name="os0">
-								<option value="Option 1">Option 1 </option>
-								<option value="Option 2">Option 2 </option>
-								<option value="Option 3">Option 3 </option>
+							<tr><td><input type="hidden" name="on0" value="prix">prix : 20 €</td></tr><tr><td><select name="os0">
+								<option value="Option 1"><%=ann.getTerrain().getNom() %> </option>
 							</select> </td></tr>
 							</table>
 							<input type="image" src="https://www.paypalobjects.com/fr_FR/FR/i/btn/btn_paynowCC_LG.gif" border="0" name="submit" alt="PayPal - la solution de paiement en ligne la plus simple et la plus sécurisée !">
@@ -97,7 +96,7 @@
 						<!--TODO modifier en fonction de si on a accédé a cette page depuis recherche ou depuis deposer-->
 						</p>
 					</header>
-					<span class="image featured"><img src="images/Sport-Quote.jpg" alt="" /></span>
+					<span class="image featured"><img src="images/ban5.jpg" alt="" /></span>
 				</section>						
 
 			</section>
@@ -115,7 +114,7 @@
 					<li><a href="#" class="icon fa-google-plus"><span class="label">Google+</span></a></li>
 				</ul>
 				<ul class="copyright">
-					<li>&copy; Co sport. All rights reserved.</li><li>Design: <a href="http://html5up.net">HTML5 UP</a></li>
+					<li>&copy; Co sport. All rights reserved.</li>
 				</ul>
 			</footer>
 

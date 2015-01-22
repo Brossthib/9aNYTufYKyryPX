@@ -53,14 +53,13 @@
 		<!-- Banner -->
 			<section id="banner">
 				<h2>Co Sport</h2>
-				<%int status = (Integer) request.getAttribute("success"); %>
-				<%if  (status == 1) {%>
-				<p>Another fine responsive way to be awesome !!</p>
-				<%} else { %>
-				<p>Votre requête est invalide !<br/>
-				Remplissez bien tous les champs</p>
-				<%} %>
-				</section>
+					<%if  ((Integer) request.getAttribute("status") == 1) {%>
+					<p>Le sport, ça se pratique à plusieurs ! <br/></p>
+					<%} else { %>
+					<p>Votre requête est invalide !<br/>
+					Remplissez bien tous les champs</p>
+					<%} %>
+			</section>
 
 		<!-- Main -->
 			<section id="main" class="container">
@@ -74,29 +73,35 @@
 							Sport : <input type= "text" name="sport" /> <br/>
 							Lieu : <input type ="text" name = "lieu" /> <br/>
 							Nombre   maximum   de   participants : <input type ="text" name = "nb" /> <br/>
+							<%if ((Integer)request.getAttribute("status") == 3) {%>
+								<span style="color : red">Le terrain selectionné n'est pas dans la bonne ville !</span><br/>	
+							<%} %>	
 							Terrain : 
 							<select name="terrain">
 							<%for (Terrain t : (ArrayList<Terrain>) request.getAttribute("Lterrain")) { %>
-								<option value="<%=t.getId()%>"><%=t.getNom()%> </option>
+								<option value="<%=t.getId()%>"><%=t.getNom()%> (à <%=t.getLieu().getNom() %>) </option>
 								<%} %>
 							</select><br/>
 							Date : 
 							<select name="jour">
-							<%for (int i=1;i<31; i++) { %>
+							<%for (int i=1;i<=31; i++) { %>
 								<option value="<%=i%>"><%=i%> </option>
 								<%} %>
 							</select>
 							<select name="mois">
-							<%for (int i=1;i<12; i++) { %>
+							<%for (int i=1;i<=12; i++) { %>
 								<option value="<%=i%>"><%=i%> </option>
 								<%} %>
 							</select>
 							<select name="annee">
-							<%for (int i=2014;i<2016; i++) { %>
+							<%for (int i=2014;i<=2016; i++) { %>
 								<option value="<%=i%>"><%=i%> </option>
 								<%} %>
 							</select><br/>
-							Heure :<input type ="text" name = "heure" />h  <input type ="text" name = "minutes" />min
+							Heure :<input type ="text" name = "heure" />h  <input type ="text" name = "minutes" />min<br/>
+							<%if ((Integer)request.getAttribute("status") == 0) {%>
+								<span style="color : red">Erreur, réessayez</span><br/>	
+							<%} %>	
 							<input type="submit" value="Deposer annonce" />
 							</form>
 							<p><a href="serv1?op=lister" class="button">Consulter les annonces</a></p>								
@@ -118,7 +123,7 @@
 					<li><a href="#" class="icon fa-google-plus"><span class="label">Google+</span></a></li>
 				</ul>
 				<ul class="copyright">
-					<li>&copy; Co sport. All rights reserved.</li><li>Design: <a href="http://html5up.net">HTML5 UP</a></li>
+					<li>&copy; Co sport. All rights reserved.</li>
 				</ul>
 			</footer>
 

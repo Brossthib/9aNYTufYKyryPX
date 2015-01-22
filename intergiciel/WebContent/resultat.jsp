@@ -57,7 +57,7 @@
 		<!-- Banner -->
 			<section id="banner">
 				<h2>Co Sport</h2>
-				<p>Another fine responsive way to be awesome !!</p>
+					<p>Le sport, ça se pratique à plusieurs ! <br/></p>	
 			</section>
 
 		<!-- Main -->
@@ -98,16 +98,12 @@
 					</p>
 					<%} else { 
 					if (ann.getTerrain().getIsPrivate()) {%>
-					<p><a href="serv1?op=payer" class="button">Participer</a><br/>
+					<p><a href="serv1?op=payer&annonce=<%=ann.getId() %>" class="button">Participer</a><br/>
 					<%} else { %>
-					<form method="post" action="serv1">
-								<input type="hidden" name="op" value="participer" />
-								<input type="hidden" name="annonce" value=<%=ann.getId() %> />
-								<input type="submit" value="Participer" /><br/>
-					</form>
+					<p><a href="serv1?op=participer&annonce=<%=ann.getId() %>" class="button">Participer</a><br/>
 					</p>
 					<%} }%>
-					<span class="image featured"><img src="images/pic01.jpg" alt="" /></span>
+					<span class="image featured"><img src="images/ban2.jpg" alt="" /></span>
 				</section>
 									
 			</section>
@@ -125,7 +121,7 @@
 					<li><a href="#" class="icon fa-google-plus"><span class="label">Google+</span></a></li>
 				</ul>
 				<ul class="copyright">
-					<li>&copy; Cosport. All rights reserved.</li><li>Design: <a href="http://html5up.net">HTML5 UP</a></li>
+					<li>&copy; Cosport. All rights reserved.</li>
 				</ul>
 			</footer>
 
