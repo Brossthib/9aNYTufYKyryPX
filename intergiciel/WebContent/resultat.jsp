@@ -41,7 +41,7 @@
 									<a href="serv1?op=mesAnnonces">Mes annonces</a>
 									<ul>
 										<%for (Annonce a : annParticipe) {%>
-										<li><a href="#"><%=a.getNom() %></a></li>
+										<li><a href="serv1?op=afficherAnnonce&annonce=<%=a.getIdString()%>"><%=a.getNom() %></a></li>
 										<%} %>
 									</ul>									
 								<li><a href="serv1?op=deconnecter">Me deconnecter</a></li>
@@ -71,12 +71,16 @@
 						<%Collection<Personne> participants = ann.getParticipants(); %>
 						
 						<p>
+						<%if ((Integer)request.getAttribute("status") == 0) {%>	
+						<span style="color : red">Désolé, vous ne pouvez pas participer.</span><br/>	
+						<%} %>
 						<b><%=ann.getNom() %></b>
 						<ul>
 						<li> Déposée par : <%=ann.getDeposeur().getPseudo() %></li>
-						<li> Date : 27/11/2016</li>
+						<li> Date : <%=ann.getDate() %></li>
 						<li> Lieu : <%=ann.getLieu().getNom() %></li>
-						<li> Sport : <%=ann.getSport() %></li>
+						<li> Sport : <%=ann.getSport().getNom() %></li>
+						<li> Terrain : <%=ann.getTerrain().getNom() %></li>
 						<li> Participants (<%=participants.size() %>/<%=ann.getNbMaxParticipant() %>)
 							<ul>
 							<%for(Personne p : participants){%>
@@ -89,13 +93,20 @@
 						
 						</ul></p>
 					</header>
-					<p><a href="pagePayement.html" class="button">Participer privé</a>
+					<%if (user == null) {%>
+					<p><a href="serv1?op=connectionjsp" class="button">Participer</a><br/>
+					</p>
+					<%} else { 
+					if (ann.getTerrain().getIsPrivate()) {%>
+					<p><a href="serv1?op=payer" class="button">Participer</a><br/>
+					<%} else { %>
 					<form method="post" action="serv1">
 								<input type="hidden" name="op" value="participer" />
 								<input type="hidden" name="annonce" value=<%=ann.getId() %> />
-								<input type="submit" value="Participer public" /><br/>
+								<input type="submit" value="Participer" /><br/>
 					</form>
 					</p>
+					<%} }%>
 					<span class="image featured"><img src="images/pic01.jpg" alt="" /></span>
 				</section>
 									

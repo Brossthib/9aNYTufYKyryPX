@@ -1,9 +1,7 @@
-<!DOCTYPE HTML>
-<!--
-	Alpha by HTML5 UP
-	html5up.net | @n33co
-	Free for personal and commercial use under the CCA 3.0 license (html5up.net/license)
--->
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<%@ page import="java.util.*,cosport.*" %>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 	<head>
 		<title>Co sport</title>
@@ -29,11 +27,29 @@
 
 		<!-- Header -->
 			<header id="header" class="alt">
-				<h1><a href="index.html">Co Sport</a> by us</h1>
+				<h1><a href="serv1?op=index">Co Sport</a> by us</h1>
 				<nav id="nav">
+				<%Personne user = (Personne) request.getAttribute("User"); %>
 					<ul>
-						<li><a href="index.html">Home</a></li>
-						<li><a href="#" class="button">Se connecter</a></li>
+						<li><a href="serv1?op=index">Home</a></li>
+						<%if (user != null) { %>
+						<%Collection<Annonce> annParticipe = user.getParticipeIci(); %>
+						<li><a href="" class="icon fa-angle-down"><%=user.getPseudo() %></a>
+							<ul>
+								<li><a href="serv1?op=profil">Profil</a></li>
+								<li>
+									<a href="serv1?op=mesAnnonces">Mes annonces</a>
+									<ul>
+										<%for (Annonce a : annParticipe) {%>
+										<li><a href="serv1?op=afficherAnnonce&annonce=<%=a.getIdString()%>"><%=a.getNom() %></a></li>
+										<%} %>
+									</ul>									
+								<li><a href="serv1?op=deconnecter">Me deconnecter</a></li>
+							</ul>
+						</li>
+						<%} else {%>
+						<li><a href="serv1?op=connectionjsp" class="button">Se connecter</a></li>
+						<%} %>
 					</ul>
 				</nav>
 			</header>
@@ -51,17 +67,22 @@
 		
 				<section class="box special">
 					<header class="major">
-						<h2>Inscrivez vous, c'est gratuit !</h2>
+						<h2>Ajoutez un terrain</h2>
 						<form method="post" action="serv1">
-							<input type="hidden" name="op" value="inscription" />	
-								Nom d'utilisateur : <input type= "text" name="pseudo" /> <br/>		
-								Nom : <input type= "text" name="nom" /> <br/>
-								Prenom : <input type= "text" name="prenom" /> <br/>
-								Genre : <br/>
-								<input class="css-checkbox" type="radio" name="genre" value="Masculin">Homme<br>
-								<input class="css-checkbox" type="radio" name="genre" value="Feminin">Femme	<br/>
-								Mot de passe : <input type="password" name="motP" /><br/>				
-							<input type="submit" value="S'inscrire" />
+							<input type="hidden" name="op" value="ajTerrain" />	
+								<%if ((Integer)request.getAttribute("status") == 2) {%>
+								<span style="color : red">Nom d'utilisateur déjà pris</span><br/>	
+								<%} %>	
+								Nom du terrain : <input type= "text" name="nom" /> <br/>		
+								Lieu : <input type= "text" name="lieu" /> <br/>
+								Sport principal : <input type= "text" name="sport" /> <br/>	
+								Est il privé : 
+								<br/>
+								<input class="css-checkbox" type="radio" name="prive" value="True">Oui<br>
+								<input class="css-checkbox" type="radio" name="prive" value="False">Non	
+								<br/>
+								
+							<input type="submit" value="Ajouter le terrain" />
 						</form>
 					</header>
 					<span class="image featured"><img src="images/sports-motivational.jpg" alt="" /></span>

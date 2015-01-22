@@ -9,6 +9,8 @@
 		<class>cosport.Personne</class>
 		<class>cosport.Annonce</class>
 		<class>cosport.Lieu</class>		
+		<class>cosport.Sport</class>		
+		<class>cosport.Terrain</class>		
 		<properties>
 			<property name="hibernate.dialect" value="org.hibernate.dialect.H2Dialect" />
 			<property name="hibernate.hbm2ddl.auto" value="update" />

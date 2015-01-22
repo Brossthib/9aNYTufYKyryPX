@@ -41,7 +41,7 @@
 									<a href="serv1?op=mesAnnonces">Mes annonces</a>
 									<ul>
 										<%for (Annonce a : annParticipe) {%>
-										<li><a href="#"><%=a.getNom() %></a></li>
+										<li><a href="serv1?op=afficherAnnonce&annonce=<%=a.getIdString()%>"><%=a.getNom() %></a></li>
 										<%} %>
 									</ul>									
 								<li><a href="serv1?op=deconnecter">Me deconnecter</a></li>
@@ -67,6 +67,7 @@
 						<p>Nom d'utilisateur : <%=user.getPseudo() %><br/>
 						Nom : <%=user.getNom() %><br/>
 						Prenom : <%=user.getPrenom() %><br/>
+						Genre : <%=user.getGenre().toString() %><br/>
 						<a href="serv1?op=modifier" class="button"/>Modifier le profil</a></p><br/>
 					</header>
 				</section>						

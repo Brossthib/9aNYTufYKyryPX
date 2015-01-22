@@ -41,7 +41,7 @@
 									<a href="serv1?op=mesAnnonces">Mes annonces</a>
 									<ul>
 										<%for (Annonce a : annParticipe) {%>
-										<li><a href="#"><%=a.getNom() %></a></li>
+										<li><a href="serv1?op=afficherAnnonce&annonce=<%=a.getIdString()%>"><%=a.getNom() %></a></li>
 										<%} %>
 									</ul>									
 								<li><a href="serv1?op=deconnecter">Me deconnecter</a></li>

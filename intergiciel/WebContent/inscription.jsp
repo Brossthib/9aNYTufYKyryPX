@@ -41,7 +41,7 @@
 									<a href="serv1?op=mesAnnonces">Mes annonces</a>
 									<ul>
 										<%for (Annonce a : annParticipe) {%>
-										<li><a href="#"><%=a.getNom() %></a></li>
+										<li><a href="serv1?op=afficherAnnonce&annonce=<%=a.getIdString()%>"><%=a.getNom() %></a></li>
 										<%} %>
 									</ul>									
 								<li><a href="serv1?op=deconnecter">Me deconnecter</a></li>
@@ -83,6 +83,9 @@
 								Confirmez le mot de passe : <input type="password" name="motP2" /><br/>	
 								<%if ((Integer)request.getAttribute("status") == 0) {%>
 								<span style="color : red">Les deux mots de passe ne correspondent pas</span><br/>	
+								<%} %>	
+								<%if ((Integer)request.getAttribute("status") == 3) {%>
+								<span style="color : red">Erreur, réessayez</span><br/>	
 								<%} %>		
 							<input type="submit" value="S'inscrire" />
 						</form>

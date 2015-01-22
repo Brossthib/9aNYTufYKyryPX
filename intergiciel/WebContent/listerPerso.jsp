@@ -41,7 +41,7 @@
 									<a href="serv1?op=mesAnnonces">Mes annonces</a>
 									<ul>
 										<%for (Annonce a : annParticipe) {%>
-										<li><a href="#"><%=a.getNom() %></a></li>
+										<li><a href="serv1?op=afficherAnnonce&annonce=<%=a.getIdString()%>"><%=a.getNom() %></a></li>
 										<%} %>
 									</ul>									
 								<li><a href="serv1?op=deconnecter">Me deconnecter</a></li>
@@ -75,14 +75,9 @@
 						<ul>
 						<%for(Annonce p : ann){%>
 							<li>
-							<b><%=p.getNom().toString()%></b><br/>
-							<%=p.getSport().toString()%><br/>
+							<b><a href="serv1?op=afficherAnnonce&annonce=<%=p.getIdString()%>"><%=p.getNom()%></a></b><br/> 
+							<%=p.getSport().getNom()%><br/>
 							<%=p.getLieu().getNom()%><br/>
-							<form method="post" action="serv1">
-								<input type="hidden" name="op" value="afficher annonce" />
-								<input type="hidden" name="annonce" value=<%=p.getIdString()%> />
-								<input type="submit" value="Plus de détails" /><br/>
-							</form>
 							</li>
 							
 						<%}%>

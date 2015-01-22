@@ -40,7 +40,7 @@
 									<a href="serv1?op=mesAnnonces">Mes annonces</a>
 									<ul>
 										<%for (Annonce a : annParticipe) {%>
-										<li><a href="#"><%=a.getNom() %></a></li>
+										<li><a href="serv1?op=afficherAnnonce&annonce=<%=a.getIdString()%>"><%=a.getNom() %></a></li>
 										<%} %>
 									</ul>									
 								<li><a href="serv1?op=deconnecter">Me deconnecter</a></li>
@@ -71,10 +71,32 @@
 						</h2>
 						<form method="post" action="serv1">
 							<input type="hidden" name="op" value="Deposer annonce" />
-							Sport2 : <input type= "text" name="sport" /> <br/>
+							Sport : <input type= "text" name="sport" /> <br/>
 							Lieu : <input type ="text" name = "lieu" /> <br/>
 							Nombre   maximum   de   participants : <input type ="text" name = "nb" /> <br/>
-							
+							Terrain : 
+							<select name="terrain">
+							<%for (Terrain t : (ArrayList<Terrain>) request.getAttribute("Lterrain")) { %>
+								<option value="<%=t.getId()%>"><%=t.getNom()%> </option>
+								<%} %>
+							</select><br/>
+							Date : 
+							<select name="jour">
+							<%for (int i=1;i<31; i++) { %>
+								<option value="<%=i%>"><%=i%> </option>
+								<%} %>
+							</select>
+							<select name="mois">
+							<%for (int i=1;i<12; i++) { %>
+								<option value="<%=i%>"><%=i%> </option>
+								<%} %>
+							</select>
+							<select name="annee">
+							<%for (int i=2014;i<2016; i++) { %>
+								<option value="<%=i%>"><%=i%> </option>
+								<%} %>
+							</select><br/>
+							Heure :<input type ="text" name = "heure" />h  <input type ="text" name = "minutes" />min
 							<input type="submit" value="Deposer annonce" />
 							</form>
 							<p><a href="serv1?op=lister" class="button">Consulter les annonces</a></p>								

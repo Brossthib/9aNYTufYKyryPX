@@ -2,8 +2,6 @@ package cosport;
 import java.util.ArrayList;
 import java.util.Collection;
 
-import org.hibernate.annotations.LazyCollection;
-import org.hibernate.annotations.LazyCollectionOption;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
@@ -11,6 +9,10 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
+
+import org.hibernate.annotations.LazyCollection;
+import org.hibernate.annotations.LazyCollectionOption;
 
 
 @Entity
@@ -20,9 +22,9 @@ public class Annonce {
 	int id;
 	
 	//private Terrain terrain;
-	private Sport sport;
 	private String nom;
 	private int nbMaxParticipant;
+	private String date;
 	
 	@ManyToOne
 	Lieu lieu;
@@ -33,21 +35,39 @@ public class Annonce {
 	@ManyToMany //(fetch = FetchType.LAZY)
 	@LazyCollection(LazyCollectionOption.FALSE)
 	Collection<Personne> participants;
+	
+	@ManyToOne
+	Terrain terrain;
+	
+	@ManyToOne 
+	Sport sport;
 
 
 	public Annonce(){}
 
-	public Annonce(Sport s,Lieu l, Personne p, int nb){
+	/*public Annonce(Sport s,Lieu l, Personne p, int nb){
 		this.sport = s;
 		this.lieu = l;
 		this.deposeur = p;
-		this.nom = s.toString() + " à " + l.getNom();
+		this.nom = s.getNom() + " à " + l.getNom();
+		this.participants = new ArrayList<Personne>();
+		this.participants.add(p);
+		this.setNbMaxParticipant(nb);
+	}*/
+	
+	public Annonce(Sport s,Lieu l, Personne p, int nb, Terrain t, String d){
+		this.sport = s;
+		this.date = d;
+		this.lieu = l;
+		this.terrain = t;
+		this.deposeur = p;
+		this.nom = s.getNom() + " à " + l.getNom();
 		this.participants = new ArrayList<Personne>();
 		this.participants.add(p);
 		this.setNbMaxParticipant(nb);
 	}
 	
-	public Annonce(Sport s,Lieu l, String n, Personne p, int nb){
+	/*public Annonce(Sport s,Lieu l, String n, Personne p, int nb){
 		this.sport = s;
 		this.lieu = l;
 		this.deposeur = p;
@@ -55,7 +75,7 @@ public class Annonce {
 		this.participants = new ArrayList<Personne>();
 		this.participants.add(p);
 		this.setNbMaxParticipant(nb);
-	}
+	}*/
 	
 	public Lieu getLieu() {
 		return lieu;
@@ -112,7 +132,24 @@ public class Annonce {
 		this.deposeur = deposeur;
 	}
 	
+	
 
+
+	public String getDate() {
+		return date;
+	}
+
+	public void setDate(String date) {
+		this.date = date;
+	}
+
+	public Terrain getTerrain() {
+		return terrain;
+	}
+
+	public void setTerrain(Terrain terrain) {
+		this.terrain = terrain;
+	}
 
 	public void supprimerParticipant(Personne p){
 		this.participants.remove(p);

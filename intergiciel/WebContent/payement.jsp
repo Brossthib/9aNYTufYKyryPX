@@ -1,8 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
-     <%@ page import="java.util.*,cosport.*" %>
+    <%@ page import="java.util.*,cosport.*" %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-
 <html>
 	<head>
 		<title>Co sport</title>
@@ -59,51 +58,51 @@
 			<section id="banner">
 				<h2>Co Sport</h2>
 				<p>Another fine responsive way to be awesome !!</p>
-				<ul class="actions">
-					<%if (user == null) { %>
-					<li><a href="serv1?op=inscrire" class="button special">S'inscrire</a></li>
-					<li><a href="serv1?op=connectionjsp" class="button">Se connecter</a></li><br/>
-					<li><a href="serv1?op=lister" class="button">Consulter les annonces</a></li><br/>
-					<%} else {
-						if (user.getPseudo().equals("admin")) { %>
-					<li><a href="serv1?op=terrainajout" class="button">Ajouter un terrain</a></li>
-					<%} %>
-					<li><a href="serv1?op=lister" class="button">Consulter les annonces</a></li><br/>
-					<li><a href="serv1?op=deposer" class="button">Deposer une annonce</a></li>
-					<li><a href="serv1?op=profil" class="button">Consulter mon profil</a></li>
-					<li><a href="serv1?op=mesAnnonces" class="button">Consulter mes annonces</a></li><br/>
-					<%}%>
-					<!-- <li><a href="serv1?op=admin" class="button">Connection rapide (admin->a et user->b)</a></li>	<br/>
-					<li><a href="serv1?op=annonce1" class="button">Deposer Annonce préfabriquée</a></li>	-->								
-				</ul>
 			</section>
-
-
 
 		<!-- Main -->
 			<section id="main" class="container">
 		
 				<section class="box special">
 					<header class="major">
-						<h2>Introducing the ultimate co sport website
-						<br />
-						for practicing with strangers </h2>
-						<p>
-							Pratiquer votre sport favori n'a jamais été aussi simple !<br/>
-							Inscrivez vous, postez votre annonce si elle n'existe pas déjà, et allez vous dégraisser !<br/>
-						</p><br/>
-						<p>Chercher une annonce<br/><form method="post" action="serv1">
-								<input type="hidden" name="op" value="rechercher" />
-								Lieu : <input style="color : black;" type="text" name="motLieu"/><br/>
-								Sport : <input type="text" style="color : black;" name="motSport"/><br/>
-								<input type="submit" value="Rechercher" /><br/>
+						<h2>Payement en ligne :</h2>
+																	
+						<form action="https://www.paypal.com/cgi-bin/webscr" method="post" target="_top">
+							<input type="hidden" name="cmd" value="_xclick">
+							<input type="hidden" name="business" value="test@gtest.com">
+							<input type="hidden" name="lc" value="FR">
+							<input type="hidden" name="item_name" value="Accès au terrain">
+							<input type="hidden" name="item_number" value="1234">
+							<input type="hidden" name="amount" value="20.00">
+							<input type="hidden" name="currency_code" value="EUR">
+							<input type="hidden" name="button_subtype" value="services">
+							<input type="hidden" name="no_note" value="0">
+							<input type="hidden" name="tax_rate" value="0.000">
+							<input type="hidden" name="shipping" value="0.00">
+							<input type="hidden" name="bn" value="PP-BuyNowBF:btn_paynowCC_LG.gif:NonHostedGuest">
+							<table>
+							<tr><td><input type="hidden" name="on0" value="prix">prix</td></tr><tr><td><select name="os0">
+								<option value="Option 1">Option 1 </option>
+								<option value="Option 2">Option 2 </option>
+								<option value="Option 3">Option 3 </option>
+							</select> </td></tr>
+							</table>
+							<input type="image" src="https://www.paypalobjects.com/fr_FR/FR/i/btn/btn_paynowCC_LG.gif" border="0" name="submit" alt="PayPal - la solution de paiement en ligne la plus simple et la plus sécurisée !">
+							<img alt="" border="0" src="https://www.paypalobjects.com/fr_FR/i/scr/pixel.gif" width="1" height="1">
 						</form>
-				</p>
+
+						<p>
+						<a href="serv1?op=index" class="button"/>Retour à l'index</a><br/>
+						<a href="serv1?op=deposer" class="button">Créer une nouvelle annonce</a><br/>
+						<!--TODO modifier en fonction de si on a accédé a cette page depuis recherche ou depuis deposer-->
+						</p>
 					</header>
-					<span class="image featured"><img src="images/sports-motivational.jpg" alt="" /></span>
-				</section>
-						
+					<span class="image featured"><img src="images/Sport-Quote.jpg" alt="" /></span>
+				</section>						
+
 			</section>
+			
+
 			
 		<!-- Footer -->
 			<footer id="footer">
@@ -122,3 +121,4 @@
 
 	</body>
 </html>
+

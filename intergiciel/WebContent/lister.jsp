@@ -75,8 +75,9 @@
 						<ul>
 						<%for(Annonce p : ann){%>
 							<li>
-							<b><a href="serv1?op=afficherAnnonce&annonce=<%=p.getIdString()%>"><%=p.getNom().toString()%></a></b><br/>
-							<%=p.getSport().toString()%><br/>
+							<b><a href="serv1?op=afficherAnnonce&annonce=<%=p.getIdString()%>"><%=p.getNom()%></a></b><br/> 
+							
+							<%=p.getSport().getNom()%><br/>
 							<%=p.getLieu().getNom().toString()%><br/><br/>
 							<!--  
 							<form method="post" action="serv1">
@@ -91,7 +92,11 @@
 						</ul>
 						<p>
 						<a href="serv1?op=index" class="button"/>Retour à l'index</a><br/>
+						<%if (user == null) { %>
+						<a href="serv1?op=connectionjsp" class="button">Créer une nouvelle annonce</a><br/>
+						<%} else { %>
 						<a href="serv1?op=deposer" class="button">Créer une nouvelle annonce</a><br/>
+						<%} %>
 						<!--TODO modifier en fonction de si on a accédé a cette page depuis recherche ou depuis deposer-->
 						</p>
 					</header>

@@ -52,6 +52,12 @@ public class serv1 extends HttpServlet {
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		
+		//L'administateur est le seul a pouvoir ajouter des terrains
+		Personne padmin = new Personne("admin", "coucou", "salut", Genre.Masculin, "a");
+		//Represente une personne vide, mais <> de null pour eviter les exceptions
+		Personne loggedOut = new Personne("out", "", "", Genre.Masculin, "");
+		session.inscription(padmin);
+		
 		if (session.isConnecte()) {
 			Personne p = session.getUtilisateur();
 			request.setAttribute("User", p);
@@ -59,6 +65,8 @@ public class serv1 extends HttpServlet {
 		else {
 			request.setAttribute("User", null);
 		}
+		
+		request.setAttribute("Lterrain", fa.listerTerrain());
 		
 		String sop = request.getParameter("op");
 		
@@ -69,20 +77,34 @@ public class serv1 extends HttpServlet {
 		}
 		
 		if(sop.equals("Deposer annonce") || sop.equals("DeposerAnnonce")){
-			//reflechir à comment obtenir la personne connectée pour lui associer l'annonce
+			//On recupere les paramètres
 			String sport = request.getParameter("sport");
 			String lieu = request.getParameter("lieu");
 			String nbp = request.getParameter("nb");
-			//String cont = request.getParameter("continuer");
-			Integer nb = Integer.parseInt(nbp);
+			String idtstring = request.getParameter("terrain");
+			String sjour = request.getParameter("jour");
+			String smois = request.getParameter("mois");
+			String sannee = request.getParameter("annee");
+			String sheure = request.getParameter("heure");
+			String sminute = request.getParameter("minutes");
 
-			System.out.println("salutnb" + nb);
+			
 
 			//Si le sport entré existe
 			try {
+				
+				Integer jour = Integer.parseInt(sjour);
+				Integer mois = Integer.parseInt(smois);
+				Integer annee = Integer.parseInt(sannee);
+				Integer heure = Integer.parseInt(sheure);
+				Integer minute = Integer.parseInt(sminute);
+				Integer nb = Integer.parseInt(nbp);
+				Integer idt = Integer.parseInt(idtstring);
+				
+				Date d = new Date(annee,mois,jour,heure,minute);
 
 				//convertir la String sport en l'objet Sport
-				Sport s = Sport.valueOf( sport);
+				Sport s = fa.valueOf(sport);
 				
 				if(lieu.equals("") || nb < 2) {
 					request.setAttribute("success", 0);
@@ -93,21 +115,13 @@ public class serv1 extends HttpServlet {
 					if (session.isConnecte()) {
 		
 						Lieu l = fa.trouverLieu(lieu);
+						Terrain t = fa.chercherTerrain(idt);
 						Personne p = session.getUtilisateur();
-						/*System.out.println("qsdkq" + l.getId());
-						Collection<Annonce> ca = fa.chercherAnnonces(l.getId());
-						request.setAttribute("annonces", ca);*/
 						
-						fa.ajouterAnnonce(s,l,p,nb);
+						fa.ajouterAnnonce(s,l,p,nb,t,d.toString());
 						request.setAttribute("annonces", fa.listerAnnonces());
 						this.getServletContext().getRequestDispatcher("/lister.jsp").forward(request, response);
 						
-						/*else {
-						System.out.println("coucou");
-						request.setAttribute("annonce", new Annonce(s,l,p,nb));
-						this.getServletContext().getRequestDispatcher("/resultatSuggestionsAnnonces.jsp").forward(request, response);
-						}*/
-						//this.getServletContext().getRequestDispatcher("/index.jsp").forward(request, response);
 					}
 					else {
 						this.getServletContext().getRequestDispatcher("/connection.jsp").forward(request, response);
@@ -129,9 +143,12 @@ public class serv1 extends HttpServlet {
 		
 		if(sop.equals("afficher annonces")|| sop.equals("afficherAnnonce")){
 			String ann = request.getParameter("annonce");
-			if (fa.trouverAnnonce(ann)==null)
-				this.getServletContext().getRequestDispatcher("/index.jsp").forward(request, response);
+			if (fa.trouverAnnonce(ann)==null) {
+				request.setAttribute("status", 0);
+				this.getServletContext().getRequestDispatcher("/resultat.jsp").forward(request, response);
+			}
 			else{
+			request.setAttribute("status", 1);
 			request.setAttribute("annonce", fa.trouverAnnonce(ann));
 			this.getServletContext().getRequestDispatcher("/resultat.jsp").forward(request, response);
 			}
@@ -146,11 +163,11 @@ public class serv1 extends HttpServlet {
 			this.getServletContext().getRequestDispatcher("/index.jsp").forward(request, response);
 		}
 		
-		if (sop.equals("annonce1")) {
+		/*if (sop.equals("annonce1")) {
 			fa.ajouterAnnonce(Sport.Tennis, new Lieu("Paris"), session.getUtilisateur(),2);
 			fa.ajouterAnnonce(Sport.Foot, new Lieu("Toulouse"), session.getUtilisateur(),24);
 			this.getServletContext().getRequestDispatcher("/index.jsp").forward(request, response);
-		}
+		}*/
 		
 		if (sop.equals("connection")) {
 			String pseudo = request.getParameter("pseudo");
@@ -178,6 +195,7 @@ public class serv1 extends HttpServlet {
 			String mdp2 = request.getParameter("motP2");
 			String prenom = request.getParameter("prenom");
 			String g = request.getParameter("genre");
+			try {
 			Genre genre = Genre.valueOf(g);
 			Personne p = new Personne(pseudo, nom, prenom, genre, mdp);
 			if (session.inscription(p) && mdp.equals(mdp2)) {
@@ -189,6 +207,10 @@ public class serv1 extends HttpServlet {
 			}
 			else {
 				request.setAttribute("status", 0);
+				this.getServletContext().getRequestDispatcher("/inscription.jsp").forward(request, response);
+			}
+			} catch (Exception e) {
+				request.setAttribute("status", 3);
 				this.getServletContext().getRequestDispatcher("/inscription.jsp").forward(request, response);
 			}
 		}
@@ -205,10 +227,13 @@ public class serv1 extends HttpServlet {
 			if (fa.ajouterParticipant(session.getUtilisateur().getId(),ida)) {
 				Annonce ann = fa.trouverAnnonce(idAnnonce);
 				request.setAttribute("annonce", ann);
+				request.setAttribute("status", 1);
 				this.getServletContext().getRequestDispatcher("/resultat.jsp").forward(request, response);
 			}
 			else
-				this.getServletContext().getRequestDispatcher("/index.jsp").forward(request, response);
+				request.setAttribute("annonce", idAnnonce);
+				request.setAttribute("status", 0);
+				this.getServletContext().getRequestDispatcher("/resultat.jsp").forward(request, response);
 		}
 		
 		if (sop.equals("mesAnnonces")) {
@@ -253,7 +278,13 @@ public class serv1 extends HttpServlet {
 			String g = request.getParameter("genre");
 			Genre genre = Genre.valueOf(g);
 			Personne pers = session.getUtilisateur();
-			if (mdp1.equals(mdp2) && pers.getMdp().equals(mdpa)) {
+			if (mdp1.equals("") && mdp2.equals("") && mdpa.equals("")) {
+				Personne newPers = new Personne(pseudo,nom,prenom,genre,pers.getMdp());
+				session.modifierUtilisateur(newPers);
+				request.setAttribute("User", newPers);
+				this.getServletContext().getRequestDispatcher("/utilisateur.jsp").forward(request, response);
+		}
+			else if (mdp1.equals(mdp2) && pers.getMdp().equals(mdpa)) {
 				Personne newPers = new Personne(pseudo,nom,prenom,genre,mdp1);
 				session.modifierUtilisateur(newPers);
 				request.setAttribute("User", newPers);
@@ -274,7 +305,7 @@ public class serv1 extends HttpServlet {
 			String s = request.getParameter("motSport");
 			
 			try {
-			Sport.valueOf(s);
+			fa.valueOf(s);
 			
 			Lieu ll = fa.trouverLieu(l);			
 			
@@ -290,6 +321,32 @@ public class serv1 extends HttpServlet {
 				this.getServletContext().getRequestDispatcher("/lister.jsp").forward(request, response);
 			}
 		}
-
+		
+		if (sop.equals("payer")) {
+			this.getServletContext().getRequestDispatcher("/payement.jsp").forward(request, response);
+		}
+		
+		if (sop.equals("terrainajout")) {
+			request.setAttribute("status", 1);
+			this.getServletContext().getRequestDispatcher("/ajouterTerrain.jsp").forward(request, response);
+		}
+		
+		if (sop.equals("ajTerrain")) {
+			try {
+				String n = request.getParameter("nom");
+				String l = request.getParameter("lieu");
+				String s = request.getParameter("sport");
+				String p = request.getParameter("prive");
+				
+				Terrain t =	new Terrain(fa.trouverLieu(l), n, Boolean.valueOf(p));
+				Sport sp = fa.valueOf(s);
+				fa.ajouterTerrain(t);
+				fa.ajouterSportTerrain(sp.getId(), t.getId());
+				this.getServletContext().getRequestDispatcher("/index.jsp").forward(request, response);
+			} catch (Exception e) {
+				System.out.println("Terrain mal crée");
+			}
+			
+		}
 	}
 }
